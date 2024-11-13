@@ -42,11 +42,11 @@ export default function Sidebar() {
       <hr className="mb-4" />
       <ul>
         {[
-          { href: "/dashboard", icon: HomeIcon, label: "Dashboard" },
-          { href: "/drivers", icon: UserIcon, label: "Drivers" },
-          { href: "/orders", icon: BoxIcon, label: "Orders" },
-          { href: "/trucks", icon: TruckIcon, label: "Trucks" },
-          { href: "/warehouses", icon: WarehouseIcon, label: "Warehouses" },
+          { href: "/", icon: HomeIcon, label: "Dashboard" },
+          { href: "/Drivers", icon: UserIcon, label: "Drivers" },
+          { href: "/Orders", icon: BoxIcon, label: "Orders" },
+          { href: "/Trucks", icon: TruckIcon, label: "Trucks" },
+          { href: "/Warehouses", icon: WarehouseIcon, label: "Warehouses" },
         ].map(({ href, icon, label }) => (
           <li key={label} className="mb-2">
             <a
