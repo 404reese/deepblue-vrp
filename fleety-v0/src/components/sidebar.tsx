@@ -14,7 +14,7 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`flex flex-col h-screen bg-gray-100 transition-width duration-300 ${
+      className={`flex flex-col min-h-screen bg-gray-100 transition-width duration-300 ${
         collapsed ? "w-16 p-2" : "w-64 p-4" // Adjust padding based on collapsed state
       }`}
     >
@@ -36,6 +36,7 @@ export default function Sidebar() {
             className={`w-6 h-6 ${collapsed ? 'rotate-180' : ''}`}
             width={24}
             height={24}
+            
           />
         </button>
       </div>
@@ -79,3 +80,4 @@ export default function Sidebar() {
     </div>
   );
 }
+
