@@ -20,11 +20,11 @@ export default function Sidebar() {
     >
       <div className="flex justify-between items-center mb-4">
         <h1
-          className={`text-2xl font-bold ${
+          className={`text-xl font-bold ${
             collapsed ? "hidden" : "block"
           }`}
         >
-          Fleety
+          Admin Panel
         </h1>
         <button
           className="p-2 rounded-full hover:bg-gray-200"
