@@ -1,34 +1,66 @@
-// AddTruck.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Truck {
   id: number;
-  modelName: string;
-  numberPlate: string;
+  name: string;
   capacity: number;
-  currentLocation: string;
+  warehouseId: number;
+  departureTime: string;
+}
+
+interface Warehouse {
+  id: number;
+  name: string;
+  address: string;
+  addressLocation: {
+    latitude: number;
+    longitude: number;
+  };
+  totalCapacity?: number;
 }
 
 interface AddTruckProps {
-  trucks: Truck[];
   setTrucks: React.Dispatch<React.SetStateAction<Truck[]>>;
 }
 
-const AddTruck = ({ trucks, setTrucks }: AddTruckProps) => {
+const AddTruck = ({ setTrucks }: AddTruckProps) => {
   const [newTruck, setNewTruck] = useState({
-    modelName: '',
-    numberPlate: '',
+    name: '',
     capacity: 0,
-    currentLocation: '',
+    warehouseId: 0,
+    departureTime: new Date().toISOString(),
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+
+  useEffect(() => {
+    const fetchWarehouses = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/warehouses');
+        if (!response.ok) {
+          throw new Error('Failed to fetch warehouses');
+        }
+        const data = await response.json();
+        setWarehouses(data);
+      } catch (error) {
+        console.error('Error fetching warehouses:', error);
+        toast.error('Failed to fetch warehouses');
+      }
+    };
+
+    fetchWarehouses();
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
     if (name === 'capacity') {
@@ -38,23 +70,40 @@ const AddTruck = ({ trucks, setTrucks }: AddTruckProps) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newId = trucks.length > 0 ? Math.max(...trucks.map((truck) => truck.id)) + 1 : 1;
+    try {
+      const response = await fetch(`http://localhost:8080/vehicles/${newTruck.warehouseId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: newTruck.name,
+          capacity: newTruck.capacity,
+          departureTime: newTruck.departureTime,
+        }),
+      });
 
-    const updatedTrucks = [
-      ...trucks,
-      { id: newId, ...newTruck },
-    ];
+      if (!response.ok) {
+        throw new Error('Failed to add truck');
+      }
 
-    setTrucks(updatedTrucks);
-    setNewTruck({
-      modelName: '',
-      numberPlate: '',
-      capacity: 0,
-      currentLocation: '',
-    }); // Reset form
+      const data = await response.json();
+      setTrucks((prev) => [...prev, data]);
+      setNewTruck({
+        name: '',
+        capacity: 0,
+        warehouseId: 0,
+        departureTime: new Date().toISOString(),
+      }); // Reset form
+
+      toast.success('Truck added successfully!');
+    } catch (error) {
+      console.error('Error adding truck:', error);
+      toast.error('Failed to add truck');
+    }
   };
 
   return (
@@ -87,28 +136,14 @@ const AddTruck = ({ trucks, setTrucks }: AddTruckProps) => {
             <div className="flex flex-row space-x-4">
               {/* Model Name */}
               <div className="flex-1">
-                <Label htmlFor="modelName">Model Name</Label>
+                <Label htmlFor="name">Model Name</Label>
                 <Input
                   type="text"
-                  id="modelName"
-                  name="modelName"
-                  value={newTruck.modelName}
+                  id="name"
+                  name="name"
+                  value={newTruck.name}
                   onChange={handleInputChange}
                   placeholder="Enter model name"
-                  required
-                />
-              </div>
-
-              {/* Number Plate */}
-              <div className="flex-1">
-                <Label htmlFor="numberPlate">Number Plate</Label>
-                <Input
-                  type="text"
-                  id="numberPlate"
-                  name="numberPlate"
-                  value={newTruck.numberPlate}
-                  onChange={handleInputChange}
-                  placeholder="Enter number plate"
                   required
                 />
               </div>
@@ -127,16 +162,32 @@ const AddTruck = ({ trucks, setTrucks }: AddTruckProps) => {
                 />
               </div>
 
-              {/* Current Location */}
+              {/* Warehouse */}
               <div className="flex-1">
-                <Label htmlFor="currentLocation">Current Location</Label>
+                <Label htmlFor="warehouseId">Warehouse</Label>
+                <Select onValueChange={(value) => setNewTruck((prev) => ({ ...prev, warehouseId: parseInt(value, 10) }))}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a warehouse" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {warehouses.map((warehouse) => (
+                      <SelectItem key={warehouse.id} value={warehouse.id.toString()}>
+                        {warehouse.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Departure Time */}
+              <div className="flex-1">
+                <Label htmlFor="departureTime">Departure Time</Label>
                 <Input
-                  type="text"
-                  id="currentLocation"
-                  name="currentLocation"
-                  value={newTruck.currentLocation}
+                  type="datetime-local"
+                  id="departureTime"
+                  name="departureTime"
+                  value={newTruck.departureTime}
                   onChange={handleInputChange}
-                  placeholder="Enter current location"
                   required
                 />
               </div>
@@ -149,6 +200,7 @@ const AddTruck = ({ trucks, setTrucks }: AddTruckProps) => {
           </form>
         </CardContent>
       </Card>
+      <ToastContainer />
     </div>
   );
 };

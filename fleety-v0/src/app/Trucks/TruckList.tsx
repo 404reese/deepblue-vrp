@@ -1,22 +1,74 @@
-// TruckList.tsx
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Truck {
   id: number;
-  modelName: string;
-  numberPlate: string;
+  name: string;
   capacity: number;
-  currentLocation: string;
+  warehouseId: number;
+  departureTime: string;
 }
 
-interface TruckListProps {
-  trucks: Truck[];
+interface Warehouse {
+  id: number;
+  name: string;
+  address: string;
+  addressLocation: {
+    latitude: number;
+    longitude: number;
+  };
+  totalCapacity?: number;
 }
 
-const TruckList = ({ trucks }: TruckListProps) => {
+const TruckList = ({ trucks }: { trucks: Truck[] }) => {
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+
+  useEffect(() => {
+    const fetchWarehouses = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/warehouses');
+        if (!response.ok) {
+          throw new Error('Failed to fetch warehouses');
+        }
+        const data = await response.json();
+        setWarehouses(data);
+      } catch (error) {
+        console.error('Error fetching warehouses:', error);
+        toast.error('Failed to fetch warehouses');
+      }
+    };
+
+    fetchWarehouses();
+  }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/vehicles/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete truck');
+      }
+
+      toast.success('Truck deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting truck:', error);
+      toast.error('Failed to delete truck');
+    }
+  };
+
+  // Function to get warehouse name by ID
+  const getWarehouseName = (warehouseId: number) => {
+    const warehouse = warehouses.find((w) => w.id === warehouseId);
+    return warehouse ? warehouse.name : 'N/A';
+  };
+
   return (
     <div className="flex flex-col space-y-4 m-4">
       <Card>
@@ -48,30 +100,34 @@ const TruckList = ({ trucks }: TruckListProps) => {
               <tr>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">ID</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Model Name</th>
-                <th className="border-b border-gray-300 px-4 py-2 text-center">Number Plate</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Capacity (tons)</th>
-                <th className="border-b border-gray-300 px-4 py-2 text-center">Current Location</th>
+                <th className="border-b border-gray-300 px-4 py-2 text-center">Warehouse</th>
+                <th className="border-b border-gray-300 px-4 py-2 text-center">Departure Time</th>
+                <th className="border-b border-gray-300 px-4 py-2 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {trucks.map((truck) => (
                 <tr key={truck.id}>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{truck.id}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{truck.modelName}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{truck.numberPlate}</td>
+                  <td className="border-b border-gray-300 px-4 py-2 text-center">{truck.name}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{truck.capacity}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{truck.currentLocation}</td>
+                  <td className="border-b border-gray-300 px-4 py-2 text-center">
+                    {getWarehouseName(truck.warehouseId)}
+                  </td>
+                  <td className="border-b border-gray-300 px-4 py-2 text-center">{truck.departureTime}</td>
+                  <td className="border-b border-gray-300 px-4 py-2 text-center">
+                    <Button onClick={() => handleDelete(truck.id)} variant="destructive">
+                      Delete
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <Link href="/">
-            <CardDescription className="mt-4 text-center text-xs">
-              To manage trucks go to dashboard
-            </CardDescription>
-          </Link>
         </CardContent>
       </Card>
+      <ToastContainer />
     </div>
   );
 };

@@ -1,25 +1,59 @@
-// DriverList.tsx
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { useState, useEffect } from 'react'; // Import useState and useEffect
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Link from 'next/link';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Driver {
   id: number;
-  user: string;
+  name: string;
   phone: string;
-  age: number;
-  status: string;
+  vehicleId?: number;
+}
+
+interface Vehicle {
+  id: number;
+  name: string;
+  capacity: number;
+  warehouseId: number;
+  departureTime: string;
 }
 
 interface DriverListProps {
   drivers: Driver[];
-  handleUpdateDriver: (id: number, updatedDriver: Driver) => void;
   handleDeleteDriver: (id: number) => void;
 }
 
-const DriverList = ({ drivers, handleUpdateDriver, handleDeleteDriver }: DriverListProps) => {
+const DriverList = ({ drivers, handleDeleteDriver }: DriverListProps) => {
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]); // Define state for vehicles
+
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/vehicles');
+        if (!response.ok) {
+          throw new Error('Failed to fetch vehicles');
+        }
+        const data = await response.json();
+        setVehicles(data);
+      } catch (error) {
+        console.error('Error fetching vehicles:', error);
+        toast.error('Failed to fetch vehicles');
+      }
+    };
+
+    fetchVehicles();
+  }, []);
+
+  // Function to get vehicle name by ID
+  const getVehicleName = (vehicleId?: number) => {
+    if (!vehicleId) return 'N/A';
+    const vehicle = vehicles.find((v) => v.id === vehicleId);
+    return vehicle ? vehicle.name : 'N/A';
+  };
+
   return (
     <div className="flex flex-col space-y-4 m-4">
       <Card>
@@ -36,38 +70,27 @@ const DriverList = ({ drivers, handleUpdateDriver, handleDeleteDriver }: DriverL
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <table className="w-full border-collapse">
+          <table className="min-w-full">
             <thead>
               <tr>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">ID</th>
-                <th className="border-b border-gray-300 px-4 py-2 text-center">User</th>
+                <th className="border-b border-gray-300 px-4 py-2 text-center">Name</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Phone</th>
-                <th className="border-b border-gray-300 px-4 py-2 text-center">Age</th>
-                <th className="border-b border-gray-300 px-4 py-2 text-center">Status</th>
+                <th className="border-b border-gray-300 px-4 py-2 text-center">Assigned Vehicle</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {drivers.map((driver) => (
-                <tr key={driver.id} className="hover:bg-secondary">
+                <tr key={driver.id}>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.id}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.user}</td>
+                  <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.name}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.phone}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.age}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.status}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">
-                    <Button
-                      variant="btn1"
-                      onClick={() =>
-                        handleUpdateDriver(driver.id, {
-                          ...driver,
-                          status: driver.status === 'Active' ? 'Inactive' : 'Active',
-                        })
-                      }
-                    >
-                      Change Status
-                    </Button>
-                    <Button variant="btn2" onClick={() => handleDeleteDriver(driver.id)}>
+                    {getVehicleName(driver.vehicleId)}
+                  </td>
+                  <td className="border-b border-gray-300 px-4 py-2 text-center">
+                    <Button onClick={() => handleDeleteDriver(driver.id)} variant="destructive">
                       Delete
                     </Button>
                   </td>
@@ -75,13 +98,9 @@ const DriverList = ({ drivers, handleUpdateDriver, handleDeleteDriver }: DriverL
               ))}
             </tbody>
           </table>
-          <Link href="/">
-            <CardDescription className="mt-4 text-center text-xs">
-              To manage drivers go to dashboard
-            </CardDescription>
-          </Link>
         </CardContent>
       </Card>
+      <ToastContainer />
     </div>
   );
 };

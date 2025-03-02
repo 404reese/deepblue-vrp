@@ -1,18 +1,27 @@
-// AddDriver.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Driver {
   id: number;
-  user: string;
+  name: string;
   phone: string;
-  age: number;
-  status: string;
+  vehicleId?: number;
+}
+
+interface Vehicle {
+  id: number;
+  name: string;
+  capacity: number;
+  warehouseId: number;
+  departureTime: string;
 }
 
 interface AddDriverProps {
@@ -22,34 +31,70 @@ interface AddDriverProps {
 
 const AddDriver = ({ drivers, setDrivers }: AddDriverProps) => {
   const [newDriver, setNewDriver] = useState({
-    user: '',
+    name: '',
     phone: '',
-    age: 0,
-    status: 'Inactive', // Default status is "Inactive"
+    vehicleId: undefined as number | undefined,
   });
+
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/vehicles');
+        if (!response.ok) {
+          throw new Error('Failed to fetch vehicles');
+        }
+        const data = await response.json();
+        setVehicles(data);
+      } catch (error) {
+        console.error('Error fetching vehicles:', error);
+        toast.error('Failed to fetch vehicles');
+      }
+    };
+
+    fetchVehicles();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'age') {
-      setNewDriver((prev) => ({ ...prev, [name]: parseInt(value, 10) || 0 }));
-    } else {
-      setNewDriver((prev) => ({ ...prev, [name]: value }));
-    }
+    setNewDriver((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newId = drivers.length > 0 ? Math.max(...drivers.map((driver) => driver.id)) + 1 : 1;
+    if (!newDriver.vehicleId) {
+      toast.error('Please select a vehicle');
+      return;
+    }
 
-    const updatedDrivers = [
-      ...drivers,
-      { id: newId, ...newDriver },
-    ];
+    try {
+      const response = await fetch(`http://localhost:8080/drivers/${newDriver.vehicleId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: newDriver.name,
+          phone: newDriver.phone,
+        }),
+      });
 
-    setDrivers(updatedDrivers);
-    setNewDriver({ user: '', phone: '', age: 0, status: 'Inactive' }); // Reset form
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add driver');
+      }
+
+      const data = await response.json();
+      setDrivers((prev) => [...prev, data]);
+      setNewDriver({ name: '', phone: '', vehicleId: undefined });
+
+      toast.success('Driver added successfully!');
+    } catch (error) {
+      console.error('Error adding driver:', error);
+      toast.error(`Failed to add driver: ${error.message}`);
+    }
   };
 
   return (
@@ -70,30 +115,16 @@ const AddDriver = ({ drivers, setDrivers }: AddDriverProps) => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-row space-x-4">
-              {/* User Name */}
+              {/* Driver Name */}
               <div className="flex-1">
-                <Label htmlFor="user">User Name</Label>
+                <Label htmlFor="name">Driver Name</Label>
                 <Input
                   type="text"
-                  id="user"
-                  name="user"
-                  value={newDriver.user}
+                  id="name"
+                  name="name"
+                  value={newDriver.name}
                   onChange={handleInputChange}
-                  placeholder="Enter user name"
-                  required
-                />
-              </div>
-
-              {/* Age */}
-              <div className="flex-1">
-                <Label htmlFor="age">Age</Label>
-                <Input
-                  type="number"
-                  id="age"
-                  name="age"
-                  value={newDriver.age}
-                  onChange={handleInputChange}
-                  placeholder="Enter age"
+                  placeholder="Enter driver name"
                   required
                 />
               </div>
@@ -111,6 +142,28 @@ const AddDriver = ({ drivers, setDrivers }: AddDriverProps) => {
                   required
                 />
               </div>
+
+              {/* Vehicle Dropdown */}
+              <div className="flex-1">
+                <Label htmlFor="vehicleId">Assign Vehicle</Label>
+                <Select
+                  onValueChange={(value) =>
+                    setNewDriver((prev) => ({ ...prev, vehicleId: parseInt(value, 10) }))
+                  }
+                  value={newDriver.vehicleId?.toString() || ''}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a vehicle" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {vehicles.map((vehicle) => (
+                      <SelectItem key={vehicle.id} value={vehicle.id.toString()}>
+                        {vehicle.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             {/* Submit Button */}
@@ -120,6 +173,7 @@ const AddDriver = ({ drivers, setDrivers }: AddDriverProps) => {
           </form>
         </CardContent>
       </Card>
+      <ToastContainer />
     </div>
   );
 };

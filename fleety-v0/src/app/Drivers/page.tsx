@@ -1,40 +1,61 @@
-// DriverPanel.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddDriver from './AddDriver';
 import DriverList from './DriverList';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Driver {
   id: number;
-  user: string;
+  name: string;
   phone: string;
-  age: number;
-  status: string;
+  vehicleId?: number;
 }
 
 const DriverPanel = () => {
-  const [drivers, setDrivers] = useState<Driver[]>([
-    { id: 1, user: 'John Doe', phone: '123-456-7890', age: 30, status: 'Active' },
-    { id: 2, user: 'Jane Doe', phone: '987-654-3210', age: 25, status: 'Inactive' },
-  ]);
+  const [drivers, setDrivers] = useState<Driver[]>([]);
 
-  const handleUpdateDriver = (id: number, updatedDriver: Driver) => {
-    setDrivers(drivers.map((driver) => (driver.id === id ? updatedDriver : driver)));
-  };
+  useEffect(() => {
+    const fetchDrivers = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/drivers');
+        if (!response.ok) {
+          throw new Error('Failed to fetch drivers');
+        }
+        const data = await response.json();
+        setDrivers(data);
+      } catch (error) {
+        console.error('Error fetching drivers:', error);
+        toast.error('Failed to fetch drivers');
+      }
+    };
 
-  const handleDeleteDriver = (id: number) => {
-    setDrivers(drivers.filter((driver) => driver.id !== id));
+    fetchDrivers();
+  }, []);
+
+  const handleDeleteDriver = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/drivers/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete driver');
+      }
+
+      setDrivers((prev) => prev.filter((driver) => driver.id !== id));
+      toast.success('Driver deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting driver:', error);
+      toast.error('Failed to delete driver');
+    }
   };
 
   return (
     <div>
       <AddDriver drivers={drivers} setDrivers={setDrivers} />
-      <DriverList
-        drivers={drivers}
-        handleUpdateDriver={handleUpdateDriver}
-        handleDeleteDriver={handleDeleteDriver}
-      />
+      <DriverList drivers={drivers} handleDeleteDriver={handleDeleteDriver} />
     </div>
   );
 };

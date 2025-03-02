@@ -1,7 +1,6 @@
-// AddWarehouse.tsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,52 +8,80 @@ import { Label } from "@/components/ui/label";
 
 interface Warehouse {
   id: number;
-  location: string;
-  capacity: number;
-  currentStock: number;
-  manager: string;
+  name: string;
+  address: string;
+  addressLocation: {
+    latitude: number;
+    longitude: number;
+  };
+  totalCapacity?: number;
 }
 
 interface AddWarehouseProps {
-  warehouses: Warehouse[];
   setWarehouses: React.Dispatch<React.SetStateAction<Warehouse[]>>;
 }
 
-const AddWarehouse = ({ warehouses, setWarehouses }: AddWarehouseProps) => {
+const AddWarehouse = ({ setWarehouses }: AddWarehouseProps) => {
   const [newWarehouse, setNewWarehouse] = useState({
-    location: '',
-    capacity: 0,
-    currentStock: 0,
-    manager: '',
+    name: '',
+    address: '',
+    addressLocation: {
+      latitude: 0,
+      longitude: 0,
+    },
+    totalCapacity: 0,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    if (name === 'capacity' || name === 'currentStock') {
-      setNewWarehouse((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
+    if (name === 'latitude' || name === 'longitude' || name === 'totalCapacity') {
+      setNewWarehouse((prev) => ({
+        ...prev,
+        [name]: parseFloat(value) || 0,
+        addressLocation: {
+          ...prev.addressLocation,
+          [name]: parseFloat(value) || 0,
+        },
+      }));
     } else {
       setNewWarehouse((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newId = warehouses.length > 0 ? Math.max(...warehouses.map((warehouse) => warehouse.id)) + 1 : 1;
+    try {
+      const response = await fetch('http://localhost:8080/warehouses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newWarehouse),
+      });
 
-    const updatedWarehouses = [
-      ...warehouses,
-      { id: newId, ...newWarehouse },
-    ];
+      if (!response.ok) {
+        throw new Error('Failed to add warehouse');
+      }
 
-    setWarehouses(updatedWarehouses);
-    setNewWarehouse({
-      location: '',
-      capacity: 0,
-      currentStock: 0,
-      manager: '',
-    }); // Reset form
+      const data = await response.json();
+      setWarehouses((prev) => [...prev, data]);
+      setNewWarehouse({
+        name: '',
+        address: '',
+        addressLocation: {
+          latitude: 0,
+          longitude: 0,
+        },
+        totalCapacity: 0,
+      }); // Reset form
+
+      alert('Warehouse added successfully!');
+    } catch (error) {
+      console.error('Error adding warehouse:', error);
+      alert('Failed to add warehouse');
+    }
   };
 
   return (
@@ -85,58 +112,72 @@ const AddWarehouse = ({ warehouses, setWarehouses }: AddWarehouseProps) => {
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-row space-x-4">
-              {/* Location */}
+              {/* Name */}
               <div className="flex-1">
-                <Label htmlFor="location">Location</Label>
+                <Label htmlFor="name">Name</Label>
                 <Input
                   type="text"
-                  id="location"
-                  name="location"
-                  value={newWarehouse.location}
+                  id="name"
+                  name="name"
+                  value={newWarehouse.name}
                   onChange={handleInputChange}
-                  placeholder="Enter location"
+                  placeholder="Enter name"
                   required
                 />
               </div>
 
-              {/* Capacity */}
+              {/* Address */}
               <div className="flex-1">
-                <Label htmlFor="capacity">Capacity</Label>
-                <Input
-                  type="number"
-                  id="capacity"
-                  name="capacity"
-                  value={newWarehouse.capacity}
-                  onChange={handleInputChange}
-                  placeholder="Enter capacity"
-                  required
-                />
-              </div>
-
-              {/* Current Stock */}
-              <div className="flex-1">
-                <Label htmlFor="currentStock">Current Stock</Label>
-                <Input
-                  type="number"
-                  id="currentStock"
-                  name="currentStock"
-                  value={newWarehouse.currentStock}
-                  onChange={handleInputChange}
-                  placeholder="Enter current stock"
-                  required
-                />
-              </div>
-
-              {/* Manager */}
-              <div className="flex-1">
-                <Label htmlFor="manager">Manager</Label>
+                <Label htmlFor="address">Address</Label>
                 <Input
                   type="text"
-                  id="manager"
-                  name="manager"
-                  value={newWarehouse.manager}
+                  id="address"
+                  name="address"
+                  value={newWarehouse.address}
                   onChange={handleInputChange}
-                  placeholder="Enter manager name"
+                  placeholder="Enter address"
+                  required
+                />
+              </div>
+
+              {/* Latitude */}
+              <div className="flex-1">
+                <Label htmlFor="latitude">Latitude</Label>
+                <Input
+                  type="number"
+                  id="latitude"
+                  name="latitude"
+                  value={newWarehouse.addressLocation.latitude}
+                  onChange={handleInputChange}
+                  placeholder="Enter latitude"
+                  required
+                />
+              </div>
+
+              {/* Longitude */}
+              <div className="flex-1">
+                <Label htmlFor="longitude">Longitude</Label>
+                <Input
+                  type="number"
+                  id="longitude"
+                  name="longitude"
+                  value={newWarehouse.addressLocation.longitude}
+                  onChange={handleInputChange}
+                  placeholder="Enter longitude"
+                  required
+                />
+              </div>
+
+              {/* Total Capacity */}
+              <div className="flex-1">
+                <Label htmlFor="totalCapacity">Total Capacity</Label>
+                <Input
+                  type="number"
+                  id="totalCapacity"
+                  name="totalCapacity"
+                  value={newWarehouse.totalCapacity}
+                  onChange={handleInputChange}
+                  placeholder="Enter total capacity"
                   required
                 />
               </div>

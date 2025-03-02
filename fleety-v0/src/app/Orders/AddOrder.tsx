@@ -1,62 +1,90 @@
-// AddOrder.tsx
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 
 interface Order {
   id: number;
-  pickupLocation: string;
-  dropLocation: string;
-  dropLocationLatLng: { lat: number; lng: number }; // Add latitude and longitude
-  dimensions: string;
-  weight: number;
-  itemType: string;
-  itemName: string;
+  senderName: string;
+  receiverName: string;
+  receiverAddress: string;
+  phoneNumber: string;
+  visit: {
+    location: {
+      latitude: number;
+      longitude: number;
+    };
+    demand: number;
+    minStartTime: string;
+    maxEndTime: string;
+    serviceDuration: string;
+  };
 }
 
-interface AddOrderProps {
-  orders: Order[];
-  setOrders: React.Dispatch<React.SetStateAction<Order[]>>;
+interface Warehouse {
+  id: string;
+  name: string;
 }
 
-const AddOrder = ({ orders, setOrders }: AddOrderProps) => {
+const AddOrder = () => {
+  const [warehouses, setWarehouses] = useState<Warehouse[]>([]);
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState<string>("");
   const [newOrder, setNewOrder] = useState({
-    pickupLocation: 'Warehouse Alpha',
-    dropLocation: '',
-    dropLocationLatLng: { lat: 0, lng: 0 }, // Initialize with default values
-    dimensions: '',
-    weight: 0,
-    itemType: 'Electronics',
-    itemName: '',
+    senderName: "",
+    receiverName: "",
+    receiverPhoneNumber: "",
+    dropLocation: "",
+    dropLocationLatLng: { lat: 0, lng: 0 },
+    weight: 1,
+    startTime: "",
+    endTime: "",
+    serviceTime: "",
   });
 
-  const dropLocationRef = useRef<HTMLInputElement>(null); // Ref for the drop location input
+  const dropLocationRef = useRef<HTMLInputElement>(null);
 
+  // Fetch warehouses from the backend
   useEffect(() => {
-    // Load Google Maps script
-    const script = document.createElement('script');
+    const fetchWarehouses = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/warehouses");
+        const data = await response.json();
+        setWarehouses(data);
+      } catch (error) {
+        console.error("Error fetching warehouses:", error);
+      }
+    };
+
+    fetchWarehouses();
+  }, []);
+
+  // Initialize Google Maps Autocomplete
+  useEffect(() => {
+    const script = document.createElement("script");
     script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
     script.async = true;
     document.head.appendChild(script);
 
-    script.addEventListener('load', () => {
+    script.addEventListener("load", () => {
       if (dropLocationRef.current) {
         const autocomplete = new google.maps.places.Autocomplete(dropLocationRef.current, {
-          types: ['geocode'], // Restrict to geographical locations
+          types: ["geocode"],
         });
 
-        // Listen for place changes
-        autocomplete.addListener('place_changed', () => {
+        autocomplete.addListener("place_changed", () => {
           const place = autocomplete.getPlace();
           if (place.geometry) {
             const { lat, lng } = place.geometry.location;
             setNewOrder((prev) => ({
               ...prev,
-              dropLocation: place.formatted_address || '',
+              dropLocation: place.formatted_address || "",
               dropLocationLatLng: { lat: lat(), lng: lng() },
             }));
           }
@@ -69,36 +97,58 @@ const AddOrder = ({ orders, setOrders }: AddOrderProps) => {
     };
   }, []);
 
+  // Handle form input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-
-    if (name === 'weight') {
-      setNewOrder((prev) => ({ ...prev, [name]: parseFloat(value) || 0 }));
-    } else {
-      setNewOrder((prev) => ({ ...prev, [name]: value }));
-    }
+    setNewOrder((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newId = orders.length > 0 ? Math.max(...orders.map((order) => order.id)) + 1 : 1;
+    if (!selectedWarehouseId) {
+      alert("Please select a warehouse");
+      return;
+    }
 
-    const updatedOrders = [
-      ...orders,
-      { id: newId, ...newOrder },
-    ];
+    const orderData = {
+      senderName: newOrder.senderName,
+      receiverName: newOrder.receiverName,
+      receiverAddress: newOrder.dropLocation,
+      phoneNumber: newOrder.receiverPhoneNumber,
+      visit: {
+        location: {
+          latitude: newOrder.dropLocationLatLng.lat,
+          longitude: newOrder.dropLocationLatLng.lng,
+        },
+        demand: newOrder.weight,
+        minStartTime: newOrder.startTime,
+        maxEndTime: newOrder.endTime,
+        serviceDuration: `PT${newOrder.serviceTime}M`, // Convert minutes to ISO 8601 duration
+      },
+    };
 
-    setOrders(updatedOrders);
-    setNewOrder({
-      pickupLocation: 'Warehouse Alpha',
-      dropLocation: '',
-      dropLocationLatLng: { lat: 0, lng: 0 },
-      dimensions: '',
-      weight: 0,
-      itemType: 'Electronics',
-      itemName: '',
-    }); // Reset form
+    try {
+      const response = await fetch(`http://localhost:8080/orders/${selectedWarehouseId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        alert("Order created successfully!");
+        console.log("Order created:", data);
+      } else {
+        throw new Error("Failed to create order");
+      }
+    } catch (error) {
+      console.error("Error creating order:", error);
+      alert("Failed to create order");
+    }
   };
 
   return (
@@ -129,105 +179,153 @@ const AddOrder = ({ orders, setOrders }: AddOrderProps) => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex flex-row space-x-4">
-              {/* Pickup Location Dropdown */}
-              <div className="flex-1">
-                <Label htmlFor="pickupLocation">Pickup Location</Label>
-                <select
-                  id="pickupLocation"
-                  name="pickupLocation"
-                  value={newOrder.pickupLocation}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                  required
-                >
-                  <option value="Warehouse Alpha">Warehouse Alpha</option>
-                  <option value="Warehouse Beta">Warehouse Beta</option>
-                </select>
-              </div>
+            {/* Warehouse Dropdown */}
+            <div className="flex-1">
+              <Label htmlFor="warehouse">Warehouse</Label>
+              <select
+                id="warehouse"
+                name="warehouse"
+                value={selectedWarehouseId}
+                onChange={(e) => setSelectedWarehouseId(e.target.value)}
+                className="w-full p-2 border rounded-md"
+                required
+              >
+                <option value="">Select a warehouse</option>
+                {warehouses.map((warehouse) => (
+                  <option key={warehouse.id} value={warehouse.id}>
+                    {warehouse.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              {/* Drop Location with Google Maps Autocomplete */}
+            {/* Sender and Receiver Info */}
+            <div className="flex flex-row space-x-4">
               <div className="flex-1">
-                <Label htmlFor="dropLocation">Drop Location</Label>
+                <Label htmlFor="senderName">Sender Name</Label>
                 <Input
                   type="text"
-                  id="dropLocation"
-                  name="dropLocation"
-                  ref={dropLocationRef}
-                  value={newOrder.dropLocation}
+                  id="senderName"
+                  name="senderName"
+                  value={newOrder.senderName}
                   onChange={handleInputChange}
-                  placeholder="Enter drop location"
+                  placeholder="Enter sender name"
+                  required
+                />
+              </div>
+
+              <div className="flex-1">
+                <Label htmlFor="receiverName">Receiver Name</Label>
+                <Input
+                  type="text"
+                  id="receiverName"
+                  name="receiverName"
+                  value={newOrder.receiverName}
+                  onChange={handleInputChange}
+                  placeholder="Enter receiver name"
+                  required
+                />
+              </div>
+
+              <div className="flex-1">
+                <Label htmlFor="receiverPhoneNumber">Receiver Phone Number</Label>
+                <Input
+                  type="text"
+                  id="receiverPhoneNumber"
+                  name="receiverPhoneNumber"
+                  value={newOrder.receiverPhoneNumber}
+                  onChange={handleInputChange}
+                  placeholder="Enter receiver phone number"
                   required
                 />
               </div>
             </div>
 
+            {/* Drop Location */}
+            <div className="flex-1">
+              <Label htmlFor="dropLocation">Drop Location</Label>
+              <Input
+                type="text"
+                id="dropLocation"
+                name="dropLocation"
+                ref={dropLocationRef}
+                value={newOrder.dropLocation}
+                onChange={handleInputChange}
+                placeholder="Enter drop location"
+                required
+              />
+            </div>
+
+            {/* Start Time, End Time, and Service Time */}
             <div className="flex flex-row space-x-4">
-              {/* Dimensions */}
               <div className="flex-1">
-                <Label htmlFor="dimensions">Dimensions (height x width x length)</Label>
-                <Input
-                  type="text"
-                  id="dimensions"
-                  name="dimensions"
-                  value={newOrder.dimensions}
-                  onChange={handleInputChange}
-                  placeholder="Enter dimensions (e.g., 10x10x10)"
+                <Label htmlFor="startTime">Start Time</Label>
+                <DateTimePicker
+                  onChange={(value) =>
+                    setNewOrder((prev) => ({
+                      ...prev,
+                      startTime: value ? value.toISOString() : "",
+                    }))
+                  }
+                  value={newOrder.startTime ? new Date(newOrder.startTime) : null}
+                  format="yyyy-MM-dd HH:mm"
+                  disableClock={true}
+                  clearIcon={null}
                   required
                 />
               </div>
 
-              {/* Weight */}
               <div className="flex-1">
-                <Label htmlFor="weight">Weight (kg)</Label>
+                <Label htmlFor="endTime">End Time</Label>
+                <DateTimePicker
+                  onChange={(value) =>
+                    setNewOrder((prev) => ({
+                      ...prev,
+                      endTime: value ? value.toISOString() : "",
+                    }))
+                  }
+                  value={newOrder.endTime ? new Date(newOrder.endTime) : null}
+                  format="yyyy-MM-dd HH:mm"
+                  disableClock={true}
+                  clearIcon={null}
+                  required
+                />
+              </div>
+
+              <div className="flex-1">
+                <Label htmlFor="serviceTime">Service Time (Minutes)</Label>
                 <Input
                   type="number"
-                  id="weight"
-                  name="weight"
-                  value={newOrder.weight}
-                  onChange={handleInputChange}
-                  placeholder="Enter weight"
+                  id="serviceTime"
+                  name="serviceTime"
+                  value={newOrder.serviceTime}
+                  onChange={(e) =>
+                    setNewOrder((prev) => ({
+                      ...prev,
+                      serviceTime: e.target.value,
+                    }))
+                  }
+                  placeholder="Enter service time in minutes"
+                  min="0"
                   required
                 />
               </div>
             </div>
 
-            <div className="flex flex-row space-x-4">
-              {/* Item Type Dropdown */}
-              <div className="flex-1">
-                <Label htmlFor="itemType">Item Type</Label>
-                <select
-                  id="itemType"
-                  name="itemType"
-                  value={newOrder.itemType}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded-md"
-                  required
-                >
-                  <option value="Electronics">Electronics</option>
-                  <option value="Books">Books</option>
-                  <option value="Clothing">Clothing</option>
-                  <option value="Furniture">Furniture</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              {/* Item Name */}
-              <div className="flex-1">
-                <Label htmlFor="itemName">Item Name</Label>
-                <Input
-                  type="text"
-                  id="itemName"
-                  name="itemName"
-                  value={newOrder.itemName}
-                  onChange={handleInputChange}
-                  placeholder="Enter item name"
-                  required
-                />
-              </div>
+            {/* Weight */}
+            <div className="flex-1">
+              <Label htmlFor="weight">Weight (kg)</Label>
+              <Input
+                type="number"
+                id="weight"
+                name="weight"
+                value={newOrder.weight}
+                onChange={handleInputChange}
+                placeholder="Enter weight"
+                required
+              />
             </div>
 
-            {/* Submit Button */}
             <Button type="submit" className="w-full">
               Add Order
             </Button>
