@@ -1,0 +1,17 @@
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\dto\ApplyRecommendationRequest.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\dto\RecommendationRequest.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\dto\VehicleRecommendation.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\geo\DrivingTimeCalculator.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\geo\HaversineDrivingTimeCalculator.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\Location.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\LocationAware.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\LocationDistanceMeter.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\Vehicle.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\VehicleRoutePlan.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\domain\Visit.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\rest\exception\ErrorInfo.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\rest\exception\VehicleRoutingSolverException.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\rest\exception\VehicleRoutingSolverExceptionMapper.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\rest\VehicleRouteDemoResource.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\rest\VehicleRoutePlanResource.java
+E:\Coding Ground\deepblue-vrp\vehicle-routing\vehicle-routing\src\main\java\org\acme\vehiclerouting\solver\VehicleRoutingConstraintProvider.java
