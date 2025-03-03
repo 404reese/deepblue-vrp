@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import DateTimePicker from "react-datetime-picker";
+import "react-datetime-picker/dist/DateTimePicker.css";
+import "react-calendar/dist/Calendar.css";
+import "react-clock/dist/Clock.css";
 
 interface Warehouse {
   id: number;
@@ -32,17 +36,47 @@ const AddWarehouse = ({ setWarehouses }: AddWarehouseProps) => {
     totalCapacity: 0,
   });
 
+  const addressRef = useRef(null);
+
+  // Initialize Google Maps Autocomplete
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
+    script.async = true;
+    document.head.appendChild(script);
+
+    script.addEventListener("load", () => {
+      if (addressRef.current) {
+        const autocomplete = new google.maps.places.Autocomplete(addressRef.current, {
+          types: ["geocode"],
+        });
+
+        autocomplete.addListener("place_changed", () => {
+          const place = autocomplete.getPlace();
+          if (place.geometry) {
+            const { lat, lng } = place.geometry.location;
+            setNewWarehouse((prev) => ({
+              ...prev,
+              address: place.formatted_address || "",
+              addressLocation: { latitude: lat(), longitude: lng() },
+            }));
+          }
+        });
+      }
+    });
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    if (name === 'latitude' || name === 'longitude' || name === 'totalCapacity') {
+    if (name === 'totalCapacity') {
       setNewWarehouse((prev) => ({
         ...prev,
         [name]: parseFloat(value) || 0,
-        addressLocation: {
-          ...prev.addressLocation,
-          [name]: parseFloat(value) || 0,
-        },
       }));
     } else {
       setNewWarehouse((prev) => ({ ...prev, [name]: value }));
@@ -133,6 +167,7 @@ const AddWarehouse = ({ setWarehouses }: AddWarehouseProps) => {
                   type="text"
                   id="address"
                   name="address"
+                  ref={addressRef}
                   value={newWarehouse.address}
                   onChange={handleInputChange}
                   placeholder="Enter address"
@@ -150,7 +185,7 @@ const AddWarehouse = ({ setWarehouses }: AddWarehouseProps) => {
                   value={newWarehouse.addressLocation.latitude}
                   onChange={handleInputChange}
                   placeholder="Enter latitude"
-                  required
+                  readOnly
                 />
               </div>
 
@@ -164,7 +199,7 @@ const AddWarehouse = ({ setWarehouses }: AddWarehouseProps) => {
                   value={newWarehouse.addressLocation.longitude}
                   onChange={handleInputChange}
                   placeholder="Enter longitude"
-                  required
+                  readOnly
                 />
               </div>
 

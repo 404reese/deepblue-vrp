@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Driver {
@@ -173,7 +173,6 @@ const AddDriver = ({ drivers, setDrivers }: AddDriverProps) => {
           </form>
         </CardContent>
       </Card>
-      <ToastContainer />
     </div>
   );
 };

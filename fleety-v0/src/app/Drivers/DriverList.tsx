@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from 'react'; // Import useState and useEffect
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Driver {
@@ -27,7 +27,8 @@ interface DriverListProps {
 }
 
 const DriverList = ({ drivers, handleDeleteDriver }: DriverListProps) => {
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]); // Define state for vehicles
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -41,14 +42,16 @@ const DriverList = ({ drivers, handleDeleteDriver }: DriverListProps) => {
       } catch (error) {
         console.error('Error fetching vehicles:', error);
         toast.error('Failed to fetch vehicles');
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchVehicles();
   }, []);
 
-  // Function to get vehicle name by ID
   const getVehicleName = (vehicleId?: number) => {
+    if (isLoading) return 'Loading...';
     if (!vehicleId) return 'N/A';
     const vehicle = vehicles.find((v) => v.id === vehicleId);
     return vehicle ? vehicle.name : 'N/A';
@@ -81,26 +84,31 @@ const DriverList = ({ drivers, handleDeleteDriver }: DriverListProps) => {
               </tr>
             </thead>
             <tbody>
-              {drivers.map((driver) => (
-                <tr key={driver.id}>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.id}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.name}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.phone}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">
-                    {getVehicleName(driver.vehicleId)}
-                  </td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">
-                    <Button onClick={() => handleDeleteDriver(driver.id)} variant="destructive">
-                      Delete
-                    </Button>
-                  </td>
+              {drivers && drivers.length > 0 ? (
+                drivers.map((driver) => (
+                  <tr key={driver.id}>
+                    <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.id}</td>
+                    <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.name}</td>
+                    <td className="border-b border-gray-300 px-4 py-2 text-center">{driver.phone}</td>
+                    <td className="border-b border-gray-300 px-4 py-2 text-center">
+                      {getVehicleName(driver.vehicleId)}
+                    </td>
+                    <td className="border-b border-gray-300 px-4 py-2 text-center">
+                      <Button onClick={() => handleDeleteDriver(driver.id)} variant="destructive">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center py-4">No drivers found.</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </CardContent>
       </Card>
-      <ToastContainer />
     </div>
   );
 };
