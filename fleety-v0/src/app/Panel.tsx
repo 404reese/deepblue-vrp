@@ -1,12 +1,13 @@
-// components/Panel.js
+// components/Panel.tsx
 "use client";
 
-import React, { useState } from 'react';  // Import useState
+import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import useRoutePlanner from './useRoutePlanner';  // Import the custom hook
 
 const Panel = () => {
-  const [isPlanning, setIsPlanning] = useState(false);  // Create a state to track the button status
+  const { isPlanning, routeData, handlePlanClick } = useRoutePlanner();  // Use the custom hook
 
   const vehicles = [
     { name: 'Vehicle 1', load: '🌟', drivingTime: '0h 0m' },
@@ -23,13 +24,13 @@ const Panel = () => {
       <div className="flex items-center space-x-6 mb-4">
         <button
           className={`px-4 py-2 rounded-full transition-colors duration-200 ${isPlanning ? 'bg-red-600 text-red-600' : 'bg-green-600 text-white'}`}  // Dynamically apply classes
-          onClick={() => setIsPlanning(prevState => !prevState)}  // Toggle the button state
+          onClick={handlePlanClick}  // Use the handler function from the custom hook
         >
           {isPlanning ? 'Stop' : 'Plan Now'}  {/* Dynamically set the text */}
         </button>
         <div className="ml-6">Score : 100</div>
         <div className="ml-6">
-          <Link href="google.com">
+          <Link href="https://www.google.com" target="_blank" rel="noopener noreferrer">
             <Image src="/notepad-text.svg" width={30} height={30} alt="Arrow Icon" className="w-6 h-6" />
           </Link>
         </div>
@@ -65,6 +66,17 @@ const Panel = () => {
           ))}
         </tbody>
       </table>
+
+      {routeData && (
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold mb-2">Route Details</h3>
+          <p><strong>Name:</strong> {routeData.name}</p>
+          <p><strong>South West Corner:</strong> {routeData.southWestCorner?.join(', ')}</p>
+          <p><strong>North East Corner:</strong> {routeData.northEastCorner?.join(', ')}</p>
+          <p><strong>Start Date Time:</strong> {routeData.startDateTime}</p>
+          <p><strong>End Date Time:</strong> {routeData.endDateTime}</p>
+        </div>
+      )}
     </div>
   );
 };
