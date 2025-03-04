@@ -10,6 +10,7 @@ interface Order {
   receiverName: string;
   receiverAddress: string;
   phoneNumber: string;
+  serviceorigin_id: number; // Assuming serviceorigin_id is a number
   visit: {
     location: {
       latitude: number;
@@ -74,7 +75,7 @@ const OrderList = () => {
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Receiver Name</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Receiver Address</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Phone Number</th>
-                <th className="border-b border-gray-300 px-4 py-2 text-center">Drop Location</th>
+                <th className="border-b border-gray-300 px-4 py-2 text-center">Warehouse ID</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Start Time</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">End Time</th>
                 <th className="border-b border-gray-300 px-4 py-2 text-center">Service Duration</th>
@@ -88,9 +89,7 @@ const OrderList = () => {
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{order.receiverName}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{order.receiverAddress}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{order.phoneNumber}</td>
-                  <td className="border-b border-gray-300 px-4 py-2 text-center">
-                    {order.visit.location.latitude}, {order.visit.location.longitude}
-                  </td>
+                  <td className="border-b border-gray-300 px-4 py-2 text-center">{order.serviceorigin_id}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{order.visit.minStartTime}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{order.visit.maxEndTime}</td>
                   <td className="border-b border-gray-300 px-4 py-2 text-center">{order.visit.serviceDuration}</td>
