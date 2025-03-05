@@ -72,9 +72,48 @@ const useRoutePlanner = () => {
   useEffect(() => {
     if (routeData) {
       console.log('Route Data from useEffect:', routeData);
-      // You can perform additional actions with the updated data here
+      // Send the updated data to the server
+      sendUpdatedData(routeData);
     }
   }, [routeData]);
+
+  const sendUpdatedData = async (data: RouteData) => {
+    try {
+      const response = await fetch('http://localhost:8081/route-plans', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        const rawResponse = await response.text();
+        console.error(`HTTP error! Status: ${response.status}, Response: ${rawResponse}`);
+        return;
+      }
+
+      // Log the raw response text
+      const rawResponse = await response.text();
+      console.log('Raw Response from POST request:', rawResponse);
+
+      // Check if the response is JSON
+      if (response.headers.get('content-type')?.includes('application/json')) {
+        try {
+          const responseData = JSON.parse(rawResponse);
+          console.log('Response from POST request:', responseData);
+        } catch (parseError) {
+          console.error('Error parsing response JSON:', parseError);
+          console.log('Raw Response Text:', rawResponse);
+        }
+      } else {
+        console.warn('Response is not JSON. Content-Type:', response.headers.get('content-type'));
+        console.log('Raw Response Text:', rawResponse);
+      }
+    } catch (error) {
+      console.error('Error sending data:', error);
+    }
+  };
 
   return { isPlanning, routeData, handlePlanClick };
 };
