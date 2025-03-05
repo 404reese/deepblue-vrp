@@ -21,7 +21,7 @@ export default function Navbar() {
   return (
     <nav className="flex justify-between items-center py-4 px-6 bg-gray-100 text-primary dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
       <div className="flex items-center space-x-4">
-        <Image src="/logo.png" alt="Fleety Logo" width={180} height={50} />
+        <Image src="/logo.png" alt="Fleety Logo" width={180} height={50} priority/>
       </div>
       <div className="flex items-center space-x-4">
         <Select onValueChange={setLanguage} value={language} className="p-1 border-primary dark:border-primary text-primary dark:text-primary hover:text-primary hover:border-primary"> {/* Adjust padding here */}

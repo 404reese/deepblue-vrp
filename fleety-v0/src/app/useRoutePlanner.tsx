@@ -1,5 +1,4 @@
-// hooks/useRoutePlanner.tsx
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react'; // Ensure this is imported
 
 interface RouteData {
   name: string;
@@ -37,6 +36,9 @@ interface RouteData {
 const useRoutePlanner = () => {
   const [isPlanning, setIsPlanning] = useState<boolean>(false);
   const [routeData, setRouteData] = useState<RouteData | null>(null);
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [hasSentData, setHasSentData] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
 
   const handlePlanClick = async () => {
     if (!isPlanning) {
@@ -57,28 +59,30 @@ const useRoutePlanner = () => {
           endDateTime: '2025-03-09T00:00:00.000000000Z',
         };
 
-        console.log('Updated Route Data:', updatedData);  // Log the updated data to the console
-
-        setRouteData(updatedData);  // Store the updated data in state
+        console.log('Updated Route Data:', updatedData);
+        setRouteData(updatedData); // Store the updated data in state
+        setHasSentData(false); // Reset the flag when new data is set
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     } else {
-      setRouteData(null);  // Clear the data if stopping the planning
+      setRouteData(null); // Clear the data if stopping the planning
+      setJobId(null); // Clear the jobId if stopping the planning
     }
-    setIsPlanning(prevState => !prevState);  // Toggle the button state
+    setIsPlanning(prevState => !prevState); // Toggle the button state
   };
 
   useEffect(() => {
-    if (routeData) {
+    if (routeData && !hasSentData) {
       console.log('Route Data from useEffect:', routeData);
-      // Send the updated data to the server
       sendUpdatedData(routeData);
+      setHasSentData(true); // Mark data as sent
     }
-  }, [routeData]);
+  }, [routeData, hasSentData]);
 
   const sendUpdatedData = async (data: RouteData) => {
     try {
+      setIsLoading(true); // Set loading state to true
       const response = await fetch('http://localhost:8081/route-plans', {
         method: 'POST',
         headers: {
@@ -90,32 +94,44 @@ const useRoutePlanner = () => {
       if (!response.ok) {
         const rawResponse = await response.text();
         console.error(`HTTP error! Status: ${response.status}, Response: ${rawResponse}`);
+        setIsLoading(false); // Reset loading state on error
         return;
       }
 
-      // Log the raw response text
       const rawResponse = await response.text();
       console.log('Raw Response from POST request:', rawResponse);
 
-      // Check if the response is JSON
-      if (response.headers.get('content-type')?.includes('application/json')) {
-        try {
-          const responseData = JSON.parse(rawResponse);
-          console.log('Response from POST request:', responseData);
-        } catch (parseError) {
-          console.error('Error parsing response JSON:', parseError);
-          console.log('Raw Response Text:', rawResponse);
-        }
-      } else {
-        console.warn('Response is not JSON. Content-Type:', response.headers.get('content-type'));
-        console.log('Raw Response Text:', rawResponse);
-      }
+      const jobId = rawResponse.trim();
+      setJobId(jobId);
+
+      // Add a 30-second delay before fetching the route plan
+      setTimeout(() => {
+        fetchRoutePlan(jobId);
+        setIsLoading(false); // Reset loading state after fetching
+      }, 30000); // 30 seconds in milliseconds
     } catch (error) {
       console.error('Error sending data:', error);
+      setIsLoading(false); // Reset loading state on error
     }
   };
 
-  return { isPlanning, routeData, handlePlanClick };
+  const fetchRoutePlan = async (jobId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8081/route-plans/${jobId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data: RouteData = await response.json();
+      console.log('Fetched Route Plan:', data);
+
+      setRouteData(data); // Update the routeData with the fetched data
+    } catch (error) {
+      console.error('Error fetching route plan:', error);
+    }
+  };
+
+  return { isPlanning, routeData, isLoading, handlePlanClick }; // Return isLoading for UI feedback
 };
 
 export default useRoutePlanner;
