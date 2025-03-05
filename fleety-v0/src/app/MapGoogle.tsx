@@ -79,7 +79,7 @@ const MapComponent: React.FC = () => {
 
   // Load the Google Maps script
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyCTqk-iV3gUS8h1q2YZGufYaBGxtDTLhdo", // Replace with your API key
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string, // Replace with your API key
   });
 
   if (!isLoaded) {
