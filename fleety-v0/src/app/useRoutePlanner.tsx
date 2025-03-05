@@ -43,7 +43,7 @@ const useRoutePlanner = () => {
   const handlePlanClick = async () => {
     if (!isPlanning) {
       try {
-        const response = await fetch('http://localhost:8080/vehiclerouteplan/1');
+        const response = await fetch('http://localhost:8080/vehiclerouteplan/2');
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

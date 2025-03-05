@@ -25,10 +25,12 @@ function MapComponent() {
   const [warehouses, setWarehouses] = useState([]);
   const [orders, setOrders] = useState([]);
 
+  // Initialize the map
   useEffect(() => {
     setMap(new window.google.maps.Map(ref.current, { ...options, center, zoom: 13 }));
   }, []);
 
+  // Fetch warehouse data
   useEffect(() => {
     const fetchWarehouses = async () => {
       try {
@@ -42,6 +44,7 @@ function MapComponent() {
     fetchWarehouses();
   }, []);
 
+  // Fetch order data
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -60,6 +63,7 @@ function MapComponent() {
       <div ref={ref} style={containerStyle} />
       {map && (
         <>
+          {/* Render custom markers for warehouses */}
           {warehouses.map((warehouse) => (
             <AdvancedMarker
               key={`warehouse-${warehouse.id}`}
@@ -68,9 +72,11 @@ function MapComponent() {
                 lat: warehouse.addressLocation.latitude,
                 lng: warehouse.addressLocation.longitude,
               }}
-              content={<img src="/warehouse.svg" alt="Warehouse" style={{ width: "30px", height: "30px" }} />}
+              content={<img src="/warehouse3.png" alt="Warehouse" style={{ width: "40px", height: "40px" }} />}
             />
           ))}
+
+          {/* Render default markers for orders */}
           {orders.map((order) => (
             <AdvancedMarker
               key={`order-${order.id}`}
@@ -79,7 +85,7 @@ function MapComponent() {
                 lat: order.visit.location.latitude,
                 lng: order.visit.location.longitude,
               }}
-              content={<img src="/map-pin.svg" alt="Order Location" style={{ width: "30px", height: "30px" }} />}
+              // No content prop = default Google Maps marker
             />
           ))}
         </>
@@ -88,6 +94,7 @@ function MapComponent() {
   );
 }
 
+// AdvancedMarker component
 function AdvancedMarker({ map, position, content }) {
   const rootRef = useRef();
   const markerRef = useRef();
@@ -98,14 +105,16 @@ function AdvancedMarker({ map, position, content }) {
       rootRef.current = createRoot(container);
       markerRef.current = new google.maps.marker.AdvancedMarkerView({
         position,
-        content: container,
+        content: content ? container : null, // Only set content if provided
       });
     }
     return () => (markerRef.current.map = null);
   }, []);
 
   useEffect(() => {
-    rootRef.current.render(content);
+    if (content) {
+      rootRef.current.render(content);
+    }
     markerRef.current.position = position;
     markerRef.current.map = map;
   }, [map, position, content]);
