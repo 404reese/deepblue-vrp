@@ -1,0 +1,1150 @@
+{
+    "name": "demo",
+    "southWestCorner": [
+        39.7656099067391,
+        -76.83782328143754
+    ],
+    "northEastCorner": [
+        40.77636644354855,
+        -74.9300739430771
+    ],
+    "startDateTime": "2025-03-08T07:30:00",
+    "endDateTime": "2025-03-09T00:00:00",
+    "vehicles": [
+        {
+            "id": "1",
+            "capacity": 15,
+            "homeLocation": [
+                40.605994321126936,
+                -75.68106859680056
+            ],
+            "departureTime": "2025-03-08T07:30:00",
+            "visits": [
+                "48",
+                "23",
+                "4",
+                "43",
+                "25",
+                "22",
+                "35",
+                "33"
+            ],
+            "arrivalTime": "2025-03-08T16:27:20",
+            "totalDemand": 13,
+            "totalDrivingTimeSeconds": 18440
+        },
+        {
+            "id": "2",
+            "capacity": 25,
+            "homeLocation": [
+                40.32196770776356,
+                -75.69785667307953
+            ],
+            "departureTime": "2025-03-08T07:30:00",
+            "visits": [
+                "19",
+                "1",
+                "27",
+                "21",
+                "42",
+                "28",
+                "37",
+                "36",
+                "10"
+            ],
+            "arrivalTime": "2025-03-08T18:16:52",
+            "totalDemand": 12,
+            "totalDrivingTimeSeconds": 22197
+        },
+        {
+            "id": "3",
+            "capacity": 26,
+            "homeLocation": [
+                40.02110506945541,
+                -75.66830470055915
+            ],
+            "departureTime": "2025-03-08T07:30:00",
+            "visits": [
+                "46",
+                "24",
+                "15",
+                "7",
+                "34",
+                "12",
+                "31",
+                "40"
+            ],
+            "arrivalTime": "2025-03-08T16:51:54",
+            "totalDemand": 11,
+            "totalDrivingTimeSeconds": 21714
+        },
+        {
+            "id": "4",
+            "capacity": 23,
+            "homeLocation": [
+                40.6542493837273,
+                -75.04215578204823
+            ],
+            "departureTime": "2025-03-08T07:30:00",
+            "visits": [
+                "2",
+                "6",
+                "11",
+                "3",
+                "45",
+                "17",
+                "16",
+                "38",
+                "26",
+                "8",
+                "49"
+            ],
+            "arrivalTime": "2025-03-08T18:51:27",
+            "totalDemand": 17,
+            "totalDrivingTimeSeconds": 25958
+        },
+        {
+            "id": "5",
+            "capacity": 30,
+            "homeLocation": [
+                40.081911979161475,
+                -76.13581777122485
+            ],
+            "departureTime": "2025-03-08T07:30:00",
+            "visits": [
+                "51",
+                "55",
+                "41",
+                "18",
+                "50",
+                "32",
+                "44",
+                "54",
+                "53",
+                "14",
+                "52"
+            ],
+            "arrivalTime": "2025-03-08T18:04:01",
+            "totalDemand": 15,
+            "totalDrivingTimeSeconds": 22172
+        },
+        {
+            "id": "6",
+            "capacity": 23,
+            "homeLocation": [
+                39.78909799094287,
+                -75.79478087138682
+            ],
+            "departureTime": "2025-03-08T07:30:00",
+            "visits": [
+                "47",
+                "9",
+                "30",
+                "13",
+                "5",
+                "29",
+                "20",
+                "39"
+            ],
+            "arrivalTime": "2025-03-08T17:16:57",
+            "totalDemand": 10,
+            "totalDrivingTimeSeconds": 18796
+        }
+    ],
+    "visits": [
+        {
+            "id": "1",
+            "name": "Hugo Rye",
+            "location": [
+                40.397480680074565,
+                -76.05412711128848
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "2",
+            "previousVisit": "19",
+            "arrivalTime": "2025-03-08T08:58:04",
+            "departureTime": "2025-03-08T09:28:04",
+            "startServiceTime": "2025-03-08T08:58:04",
+            "drivingTimeSecondsFromPreviousStandstill": 2284
+        },
+        {
+            "id": "2",
+            "name": "Flo Li",
+            "location": [
+                40.64262179256735,
+                -74.9664257901298
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "4",
+            "previousVisit": null,
+            "arrivalTime": "2025-03-08T07:41:11",
+            "departureTime": "2025-03-08T08:40:00",
+            "startServiceTime": "2025-03-08T08:00:00",
+            "drivingTimeSecondsFromPreviousStandstill": 671
+        },
+        {
+            "id": "3",
+            "name": "Jay Rye",
+            "location": [
+                40.29797480319981,
+                -75.12211750807134
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "4",
+            "previousVisit": "11",
+            "arrivalTime": "2025-03-08T11:47:25",
+            "departureTime": "2025-03-08T11:57:25",
+            "startServiceTime": "2025-03-08T11:47:25",
+            "drivingTimeSecondsFromPreviousStandstill": 2350
+        },
+        {
+            "id": "4",
+            "name": "Hugo Rye",
+            "location": [
+                40.075781934359824,
+                -75.55757801178056
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "1",
+            "previousVisit": "23",
+            "arrivalTime": "2025-03-08T10:34:45",
+            "departureTime": "2025-03-08T10:44:45",
+            "startServiceTime": "2025-03-08T10:34:45",
+            "drivingTimeSecondsFromPreviousStandstill": 1437
+        },
+        {
+            "id": "5",
+            "name": "Ivy Smith",
+            "location": [
+                39.77014375846698,
+                -76.70142241853154
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "6",
+            "previousVisit": "13",
+            "arrivalTime": "2025-03-08T12:01:18",
+            "departureTime": "2025-03-08T13:20:00",
+            "startServiceTime": "2025-03-08T13:00:00",
+            "drivingTimeSecondsFromPreviousStandstill": 495
+        },
+        {
+            "id": "6",
+            "name": "Carl Li",
+            "location": [
+                40.70800705778431,
+                -75.41758188702215
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "4",
+            "previousVisit": "2",
+            "arrivalTime": "2025-03-08T09:46:24",
+            "departureTime": "2025-03-08T10:06:24",
+            "startServiceTime": "2025-03-08T09:46:24",
+            "drivingTimeSecondsFromPreviousStandstill": 3984
+        },
+        {
+            "id": "7",
+            "name": "Jay Jones",
+            "location": [
+                39.98552062309637,
+                -75.20767595387512
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "3",
+            "previousVisit": "15",
+            "arrivalTime": "2025-03-08T10:47:26",
+            "departureTime": "2025-03-08T10:57:26",
+            "startServiceTime": "2025-03-08T10:47:26",
+            "drivingTimeSecondsFromPreviousStandstill": 1064
+        },
+        {
+            "id": "8",
+            "name": "Dan Rye",
+            "location": [
+                40.72399383003122,
+                -75.52159293214041
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "4",
+            "previousVisit": "26",
+            "arrivalTime": "2025-03-08T16:49:38",
+            "departureTime": "2025-03-08T17:19:38",
+            "startServiceTime": "2025-03-08T16:49:38",
+            "drivingTimeSecondsFromPreviousStandstill": 840
+        },
+        {
+            "id": "9",
+            "name": "Hugo Rye",
+            "location": [
+                39.77999939572047,
+                -76.08578171444725
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "6",
+            "previousVisit": "47",
+            "arrivalTime": "2025-03-08T09:12:17",
+            "departureTime": "2025-03-08T09:32:17",
+            "startServiceTime": "2025-03-08T09:12:17",
+            "drivingTimeSecondsFromPreviousStandstill": 1937
+        },
+        {
+            "id": "10",
+            "name": "Beth Rye",
+            "location": [
+                40.085311494454814,
+                -75.92437026732115
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "2",
+            "previousVisit": "36",
+            "arrivalTime": "2025-03-08T16:40:59",
+            "departureTime": "2025-03-08T17:20:59",
+            "startServiceTime": "2025-03-08T16:40:59",
+            "drivingTimeSecondsFromPreviousStandstill": 4095
+        },
+        {
+            "id": "11",
+            "name": "Amy Li",
+            "location": [
+                40.45025005295749,
+                -75.30323845644708
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "4",
+            "previousVisit": "6",
+            "arrivalTime": "2025-03-08T10:58:15",
+            "departureTime": "2025-03-08T11:08:15",
+            "startServiceTime": "2025-03-08T10:58:15",
+            "drivingTimeSecondsFromPreviousStandstill": 3111
+        },
+        {
+            "id": "12",
+            "name": "Dan Watt",
+            "location": [
+                40.24216923523133,
+                -75.47775623279443
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "3",
+            "previousVisit": "34",
+            "arrivalTime": "2025-03-08T13:30:09",
+            "departureTime": "2025-03-08T13:50:09",
+            "startServiceTime": "2025-03-08T13:30:09",
+            "drivingTimeSecondsFromPreviousStandstill": 5436
+        },
+        {
+            "id": "13",
+            "name": "Hugo Fox",
+            "location": [
+                39.81338419299707,
+                -76.70118336125125
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "6",
+            "previousVisit": "30",
+            "arrivalTime": "2025-03-08T11:23:03",
+            "departureTime": "2025-03-08T11:53:03",
+            "startServiceTime": "2025-03-08T11:23:03",
+            "drivingTimeSecondsFromPreviousStandstill": 3100
+        },
+        {
+            "id": "14",
+            "name": "Beth Poe",
+            "location": [
+                40.25266158812379,
+                -76.17040943635479
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "5",
+            "previousVisit": "53",
+            "arrivalTime": "2025-03-08T16:50:44",
+            "departureTime": "2025-03-08T17:10:44",
+            "startServiceTime": "2025-03-08T16:50:44",
+            "drivingTimeSecondsFromPreviousStandstill": 659
+        },
+        {
+            "id": "15",
+            "name": "Amy Li",
+            "location": [
+                40.078093565408366,
+                -75.21951671829892
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "3",
+            "previousVisit": "24",
+            "arrivalTime": "2025-03-08T09:59:42",
+            "departureTime": "2025-03-08T10:29:42",
+            "startServiceTime": "2025-03-08T09:59:42",
+            "drivingTimeSecondsFromPreviousStandstill": 440
+        },
+        {
+            "id": "16",
+            "name": "Amy Fox",
+            "location": [
+                40.594610245280435,
+                -75.07130746787915
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "4",
+            "previousVisit": "17",
+            "arrivalTime": "2025-03-08T14:31:05",
+            "departureTime": "2025-03-08T14:41:05",
+            "startServiceTime": "2025-03-08T14:31:05",
+            "drivingTimeSecondsFromPreviousStandstill": 3338
+        },
+        {
+            "id": "17",
+            "name": "Jay Fox",
+            "location": [
+                40.30293672999141,
+                -75.08495609580383
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "4",
+            "previousVisit": "45",
+            "arrivalTime": "2025-03-08T13:05:27",
+            "departureTime": "2025-03-08T13:35:27",
+            "startServiceTime": "2025-03-08T13:05:27",
+            "drivingTimeSecondsFromPreviousStandstill": 1601
+        },
+        {
+            "id": "18",
+            "name": "Dan Watt",
+            "location": [
+                40.31792995685216,
+                -76.55432081767576
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "5",
+            "previousVisit": "41",
+            "arrivalTime": "2025-03-08T10:38:30",
+            "departureTime": "2025-03-08T11:18:30",
+            "startServiceTime": "2025-03-08T10:38:30",
+            "drivingTimeSecondsFromPreviousStandstill": 3082
+        },
+        {
+            "id": "19",
+            "name": "Dan Green",
+            "location": [
+                40.27776185706023,
+                -75.8444795297951
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "2",
+            "previousVisit": null,
+            "arrivalTime": "2025-03-08T07:52:55",
+            "departureTime": "2025-03-08T08:20:00",
+            "startServiceTime": "2025-03-08T08:00:00",
+            "drivingTimeSecondsFromPreviousStandstill": 1375
+        },
+        {
+            "id": "20",
+            "name": "Ivy Smith",
+            "location": [
+                39.983891819868994,
+                -76.31150618438869
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "6",
+            "previousVisit": "29",
+            "arrivalTime": "2025-03-08T15:11:21",
+            "departureTime": "2025-03-08T15:31:21",
+            "startServiceTime": "2025-03-08T15:11:21",
+            "drivingTimeSecondsFromPreviousStandstill": 2743
+        },
+        {
+            "id": "21",
+            "name": "Carl Smith",
+            "location": [
+                40.379430473701326,
+                -76.38934627445954
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "2",
+            "previousVisit": "27",
+            "arrivalTime": "2025-03-08T10:57:14",
+            "departureTime": "2025-03-08T11:37:14",
+            "startServiceTime": "2025-03-08T10:57:14",
+            "drivingTimeSecondsFromPreviousStandstill": 1355
+        },
+        {
+            "id": "22",
+            "name": "Amy Rye",
+            "location": [
+                40.35275324160754,
+                -75.70471381384071
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "1",
+            "previousVisit": "25",
+            "arrivalTime": "2025-03-08T13:07:24",
+            "departureTime": "2025-03-08T13:47:24",
+            "startServiceTime": "2025-03-08T13:07:24",
+            "drivingTimeSecondsFromPreviousStandstill": 3235
+        },
+        {
+            "id": "23",
+            "name": "Amy Poe",
+            "location": [
+                40.199127912888486,
+                -75.52614709860364
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "1",
+            "previousVisit": "48",
+            "arrivalTime": "2025-03-08T09:30:48",
+            "departureTime": "2025-03-08T10:10:48",
+            "startServiceTime": "2025-03-08T09:30:48",
+            "drivingTimeSecondsFromPreviousStandstill": 1407
+        },
+        {
+            "id": "24",
+            "name": "Amy Poe",
+            "location": [
+                40.116505403902146,
+                -75.22148149265999
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "3",
+            "previousVisit": "46",
+            "arrivalTime": "2025-03-08T09:32:22",
+            "departureTime": "2025-03-08T09:52:22",
+            "startServiceTime": "2025-03-08T09:32:22",
+            "drivingTimeSecondsFromPreviousStandstill": 3548
+        },
+        {
+            "id": "25",
+            "name": "Amy Li",
+            "location": [
+                40.08093535763165,
+                -75.80720099306666
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "1",
+            "previousVisit": "43",
+            "arrivalTime": "2025-03-08T12:03:29",
+            "departureTime": "2025-03-08T12:13:29",
+            "startServiceTime": "2025-03-08T12:03:29",
+            "drivingTimeSecondsFromPreviousStandstill": 1477
+        },
+        {
+            "id": "26",
+            "name": "Flo Poe",
+            "location": [
+                40.65302048518702,
+                -75.5463285840707
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "4",
+            "previousVisit": "38",
+            "arrivalTime": "2025-03-08T16:05:38",
+            "departureTime": "2025-03-08T16:35:38",
+            "startServiceTime": "2025-03-08T16:05:38",
+            "drivingTimeSecondsFromPreviousStandstill": 329
+        },
+        {
+            "id": "27",
+            "name": "Dan Green",
+            "location": [
+                40.403831988376965,
+                -76.23708761191482
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "2",
+            "previousVisit": "1",
+            "arrivalTime": "2025-03-08T09:54:39",
+            "departureTime": "2025-03-08T10:34:39",
+            "startServiceTime": "2025-03-08T09:54:39",
+            "drivingTimeSecondsFromPreviousStandstill": 1595
+        },
+        {
+            "id": "28",
+            "name": "Hugo King",
+            "location": [
+                40.702920667999415,
+                -76.40355132018726
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "2",
+            "previousVisit": "42",
+            "arrivalTime": "2025-03-08T12:50:10",
+            "departureTime": "2025-03-08T13:10:00",
+            "startServiceTime": "2025-03-08T13:00:00",
+            "drivingTimeSecondsFromPreviousStandstill": 2576
+        },
+        {
+            "id": "29",
+            "name": "Flo Green",
+            "location": [
+                39.9465130341056,
+                -76.62056492428388
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "6",
+            "previousVisit": "5",
+            "arrivalTime": "2025-03-08T13:55:38",
+            "departureTime": "2025-03-08T14:25:38",
+            "startServiceTime": "2025-03-08T13:55:38",
+            "drivingTimeSecondsFromPreviousStandstill": 2138
+        },
+        {
+            "id": "30",
+            "name": "Carl Li",
+            "location": [
+                39.81728138965798,
+                -76.34830312962215
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "6",
+            "previousVisit": "9",
+            "arrivalTime": "2025-03-08T10:11:23",
+            "departureTime": "2025-03-08T10:31:23",
+            "startServiceTime": "2025-03-08T10:11:23",
+            "drivingTimeSecondsFromPreviousStandstill": 2346
+        },
+        {
+            "id": "31",
+            "name": "Ivy Fox",
+            "location": [
+                40.01884098483224,
+                -75.4345966368074
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "3",
+            "previousVisit": "12",
+            "arrivalTime": "2025-03-08T14:33:11",
+            "departureTime": "2025-03-08T15:03:11",
+            "startServiceTime": "2025-03-08T14:33:11",
+            "drivingTimeSecondsFromPreviousStandstill": 2582
+        },
+        {
+            "id": "32",
+            "name": "Ivy Watt",
+            "location": [
+                40.222245936218,
+                -76.69089999595084
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "5",
+            "previousVisit": "50",
+            "arrivalTime": "2025-03-08T12:56:40",
+            "departureTime": "2025-03-08T13:20:00",
+            "startServiceTime": "2025-03-08T13:00:00",
+            "drivingTimeSecondsFromPreviousStandstill": 2853
+        },
+        {
+            "id": "33",
+            "name": "Hugo Li",
+            "location": [
+                40.66743084029352,
+                -75.81786653773989
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "1",
+            "previousVisit": "35",
+            "arrivalTime": "2025-03-08T15:34:20",
+            "departureTime": "2025-03-08T16:04:20",
+            "startServiceTime": "2025-03-08T15:34:20",
+            "drivingTimeSecondsFromPreviousStandstill": 3835
+        },
+        {
+            "id": "34",
+            "name": "Beth Cole",
+            "location": [
+                39.94286898709739,
+                -74.995053938267
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "3",
+            "previousVisit": "7",
+            "arrivalTime": "2025-03-08T11:29:33",
+            "departureTime": "2025-03-08T11:59:33",
+            "startServiceTime": "2025-03-08T11:29:33",
+            "drivingTimeSecondsFromPreviousStandstill": 1927
+        },
+        {
+            "id": "35",
+            "name": "Carl King",
+            "location": [
+                40.34769705446544,
+                -75.68507059014752
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "1",
+            "previousVisit": "22",
+            "arrivalTime": "2025-03-08T13:50:25",
+            "departureTime": "2025-03-08T14:30:25",
+            "startServiceTime": "2025-03-08T13:50:25",
+            "drivingTimeSecondsFromPreviousStandstill": 181
+        },
+        {
+            "id": "36",
+            "name": "Gus King",
+            "location": [
+                40.39252974073754,
+                -76.1651511926898
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "2",
+            "previousVisit": "37",
+            "arrivalTime": "2025-03-08T15:02:44",
+            "departureTime": "2025-03-08T15:32:44",
+            "startServiceTime": "2025-03-08T15:02:44",
+            "drivingTimeSecondsFromPreviousStandstill": 1213
+        },
+        {
+            "id": "37",
+            "name": "Jay Green",
+            "location": [
+                40.44159729223553,
+                -76.28862651068417
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "2",
+            "previousVisit": "28",
+            "arrivalTime": "2025-03-08T14:02:31",
+            "departureTime": "2025-03-08T14:42:31",
+            "startServiceTime": "2025-03-08T14:02:31",
+            "drivingTimeSecondsFromPreviousStandstill": 3151
+        },
+        {
+            "id": "38",
+            "name": "Gus Cole",
+            "location": [
+                40.62427702439819,
+                -75.54696240486255
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "4",
+            "previousVisit": "16",
+            "arrivalTime": "2025-03-08T15:50:09",
+            "departureTime": "2025-03-08T16:00:09",
+            "startServiceTime": "2025-03-08T15:50:09",
+            "drivingTimeSecondsFromPreviousStandstill": 4144
+        },
+        {
+            "id": "39",
+            "name": "Ivy Watt",
+            "location": [
+                39.80178768437485,
+                -75.92713312289646
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "6",
+            "previousVisit": "20",
+            "arrivalTime": "2025-03-08T16:37:25",
+            "departureTime": "2025-03-08T16:57:25",
+            "startServiceTime": "2025-03-08T16:37:25",
+            "drivingTimeSecondsFromPreviousStandstill": 3964
+        },
+        {
+            "id": "40",
+            "name": "Ivy Fox",
+            "location": [
+                39.87710487933726,
+                -75.72337998769575
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "3",
+            "previousVisit": "31",
+            "arrivalTime": "2025-03-08T15:53:18",
+            "departureTime": "2025-03-08T16:23:18",
+            "startServiceTime": "2025-03-08T15:53:18",
+            "drivingTimeSecondsFromPreviousStandstill": 3007
+        },
+        {
+            "id": "41",
+            "name": "Gus Green",
+            "location": [
+                40.11387697055404,
+                -76.32388557082447
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "5",
+            "previousVisit": "55",
+            "arrivalTime": "2025-03-08T09:27:08",
+            "departureTime": "2025-03-08T09:47:08",
+            "startServiceTime": "2025-03-08T09:27:08",
+            "drivingTimeSecondsFromPreviousStandstill": 1906
+        },
+        {
+            "id": "42",
+            "name": "Carl Rye",
+            "location": [
+                40.47884016635378,
+                -76.43332903811294
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "2",
+            "previousVisit": "21",
+            "arrivalTime": "2025-03-08T11:57:14",
+            "departureTime": "2025-03-08T12:07:14",
+            "startServiceTime": "2025-03-08T11:57:14",
+            "drivingTimeSecondsFromPreviousStandstill": 1200
+        },
+        {
+            "id": "43",
+            "name": "Ivy Watt",
+            "location": [
+                39.962866883301395,
+                -75.73894709354455
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "1",
+            "previousVisit": "4",
+            "arrivalTime": "2025-03-08T11:18:52",
+            "departureTime": "2025-03-08T11:38:52",
+            "startServiceTime": "2025-03-08T11:18:52",
+            "drivingTimeSecondsFromPreviousStandstill": 2047
+        },
+        {
+            "id": "44",
+            "name": "Beth Fox",
+            "location": [
+                40.178677160964654,
+                -76.74353978587172
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "5",
+            "previousVisit": "32",
+            "arrivalTime": "2025-03-08T13:31:18",
+            "departureTime": "2025-03-08T13:51:18",
+            "startServiceTime": "2025-03-08T13:31:18",
+            "drivingTimeSecondsFromPreviousStandstill": 678
+        },
+        {
+            "id": "45",
+            "name": "Dan Watt",
+            "location": [
+                40.25071865328685,
+                -75.25516697774337
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "4",
+            "previousVisit": "3",
+            "arrivalTime": "2025-03-08T12:18:46",
+            "departureTime": "2025-03-08T12:38:46",
+            "startServiceTime": "2025-03-08T12:18:46",
+            "drivingTimeSecondsFromPreviousStandstill": 1281
+        },
+        {
+            "id": "46",
+            "name": "Gus Jones",
+            "location": [
+                39.89733310261253,
+                -75.50817729030503
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "3",
+            "previousVisit": null,
+            "arrivalTime": "2025-03-08T08:03:14",
+            "departureTime": "2025-03-08T08:33:14",
+            "startServiceTime": "2025-03-08T08:03:14",
+            "drivingTimeSecondsFromPreviousStandstill": 1994
+        },
+        {
+            "id": "47",
+            "name": "Elsa Li",
+            "location": [
+                39.83560130465759,
+                -75.87753504877365
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "6",
+            "previousVisit": null,
+            "arrivalTime": "2025-03-08T07:45:01",
+            "departureTime": "2025-03-08T08:40:00",
+            "startServiceTime": "2025-03-08T08:00:00",
+            "drivingTimeSecondsFromPreviousStandstill": 901
+        },
+        {
+            "id": "48",
+            "name": "Carl Watt",
+            "location": [
+                40.31913709309114,
+                -75.5616576867102
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "1",
+            "previousVisit": null,
+            "arrivalTime": "2025-03-08T08:27:21",
+            "departureTime": "2025-03-08T09:07:21",
+            "startServiceTime": "2025-03-08T08:27:21",
+            "drivingTimeSecondsFromPreviousStandstill": 3441
+        },
+        {
+            "id": "49",
+            "name": "Flo Watt",
+            "location": [
+                40.73220506795902,
+                -75.51571703993622
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 1200.000000000,
+            "vehicle": "4",
+            "previousVisit": "8",
+            "arrivalTime": "2025-03-08T17:21:25",
+            "departureTime": "2025-03-08T17:41:25",
+            "startServiceTime": "2025-03-08T17:21:25",
+            "drivingTimeSecondsFromPreviousStandstill": 107
+        },
+        {
+            "id": "50",
+            "name": "Hugo Green",
+            "location": [
+                40.383723613680274,
+                -76.44165250198834
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 1800.000000000,
+            "vehicle": "5",
+            "previousVisit": "18",
+            "arrivalTime": "2025-03-08T11:39:07",
+            "departureTime": "2025-03-08T12:09:07",
+            "startServiceTime": "2025-03-08T11:39:07",
+            "drivingTimeSecondsFromPreviousStandstill": 1237
+        },
+        {
+            "id": "51",
+            "name": "Dan Cole",
+            "location": [
+                40.028441811631104,
+                -75.95086572780204
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "5",
+            "previousVisit": null,
+            "arrivalTime": "2025-03-08T07:58:51",
+            "departureTime": "2025-03-08T08:10:00",
+            "startServiceTime": "2025-03-08T08:00:00",
+            "drivingTimeSecondsFromPreviousStandstill": 1731
+        },
+        {
+            "id": "52",
+            "name": "Beth Cole",
+            "location": [
+                40.25824871569093,
+                -76.1061594559102
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "5",
+            "previousVisit": "14",
+            "arrivalTime": "2025-03-08T17:20:08",
+            "departureTime": "2025-03-08T17:30:08",
+            "startServiceTime": "2025-03-08T17:20:08",
+            "drivingTimeSecondsFromPreviousStandstill": 564
+        },
+        {
+            "id": "53",
+            "name": "Jay Watt",
+            "location": [
+                40.3098291683825,
+                -76.16067860950086
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "5",
+            "previousVisit": "54",
+            "arrivalTime": "2025-03-08T15:59:45",
+            "departureTime": "2025-03-08T16:39:45",
+            "startServiceTime": "2025-03-08T15:59:45",
+            "drivingTimeSecondsFromPreviousStandstill": 3684
+        },
+        {
+            "id": "54",
+            "name": "Elsa Smith",
+            "location": [
+                40.2242491057051,
+                -76.5676008969562
+            ],
+            "demand": 2,
+            "minStartTime": "2025-03-08T13:00:00",
+            "maxEndTime": "2025-03-08T18:00:00",
+            "serviceDuration": 2400.000000000,
+            "vehicle": "5",
+            "previousVisit": "44",
+            "arrivalTime": "2025-03-08T14:18:21",
+            "departureTime": "2025-03-08T14:58:21",
+            "startServiceTime": "2025-03-08T14:18:21",
+            "drivingTimeSecondsFromPreviousStandstill": 1623
+        },
+        {
+            "id": "55",
+            "name": "Amy Rye",
+            "location": [
+                40.16424539267706,
+                -76.11614579842232
+            ],
+            "demand": 1,
+            "minStartTime": "2025-03-08T08:00:00",
+            "maxEndTime": "2025-03-08T12:00:00",
+            "serviceDuration": 600.000000000,
+            "vehicle": "5",
+            "previousVisit": "51",
+            "arrivalTime": "2025-03-08T08:45:22",
+            "departureTime": "2025-03-08T08:55:22",
+            "startServiceTime": "2025-03-08T08:45:22",
+            "drivingTimeSecondsFromPreviousStandstill": 2122
+        }
+    ],
+    "score": "-71hard/-129277soft",
+    "solverStatus": "NOT_SOLVING",
+    "scoreExplanation": "Explanation of score (-71hard/-129277soft):\n    Constraint matches:\n        -71hard: constraint (serviceFinishedAfterMaxEndTime) has 4 matches:\n            -39hard: justified with ([45])\n            -14hard: justified with ([25])\n            ...\n        -129277soft: constraint (minimizeTravelTime) has 6 matches:\n            -25958soft: justified with ([4])\n            -22197soft: justified with ([2])\n            ...\n        0: constraint (vehicleCapacity) has 0 matches:\n    Indictments (top 5 of 10):\n        -39hard: indicted with (45) has 1 matches:\n            -39hard: constraint (serviceFinishedAfterMaxEndTime)\n        -14hard: indicted with (25) has 1 matches:\n            -14hard: constraint (serviceFinishedAfterMaxEndTime)\n        -10hard: indicted with (50) has 1 matches:\n            -10hard: constraint (serviceFinishedAfterMaxEndTime)\n        -8hard: indicted with (42) has 1 matches:\n            -8hard: constraint (serviceFinishedAfterMaxEndTime)\n        -25958soft: indicted with (4) has 1 matches:\n            -25958soft: constraint (minimizeTravelTime)\n        ...\n",
+    "totalDrivingTimeSeconds": 129277
+}

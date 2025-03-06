@@ -1,77 +1,96 @@
-// components/Panel.js
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
 import useRoutePlanner from './useRoutePlanner'; // Import the custom hook
 import SolutionDetails from './SolutionDetails'; // Import the new component
 
 const Panel = ({ onSolutionUpdate }) => {
+  const [warehouses, setWarehouses] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:8080/warehouses')
+      .then(res => res.json())
+      .then(data => setWarehouses(data))
+      .catch(err => console.error('Failed to fetch warehouses:', err));
+  }, []);
+
+  return (
+    <div className="space-y-4">
+      {warehouses.map(warehouse => (
+        <WarehouseCard
+          key={warehouse.id}
+          warehouse={warehouse}
+          onSolutionUpdate={onSolutionUpdate}
+        />
+      ))}
+    </div>
+  );
+};
+
+const WarehouseCard = ({ warehouse, onSolutionUpdate }) => {
   const { 
     isPlanning, 
-    routeData, 
-    isLoading, 
     handlePlanClick,
+    routeData,
     jobId
-  } = useRoutePlanner(); // Use the custom hook
-  const [countdown, setCountdown] = useState<number | null>(null); // Countdown state
+  } = useRoutePlanner(warehouse.id);
 
-  // Start the countdown when isLoading is true
+  const [countdown, setCountdown] = useState<number | null>(null);
+
   useEffect(() => {
-    if (isLoading) {
-      setCountdown(35); // Initialize countdown to 35 seconds
-      const interval = setInterval(() => {
-        setCountdown((prev) => (prev && prev > 0 ? prev - 1 : null)); // Decrement countdown
-      }, 1000); // Update every second
+    let intervalId;
 
-      return () => clearInterval(interval); // Cleanup interval on unmount
+    if (isPlanning) {
+      setCountdown(35);
+      intervalId = setInterval(() => {
+        setCountdown((prev) => (prev && prev > 0 ? prev - 1 : null));
+      }, 1000);
     } else {
-      setCountdown(null); // Reset countdown when not loading
-      // Update parent state with the latest routeData
-      onSolutionUpdate(routeData);
+      // Reset countdown when planning stops
+      clearInterval(intervalId); // Clear any existing interval
+      setCountdown(null);
     }
-  }, [isLoading, routeData, onSolutionUpdate]);
 
-  // Function to open route map in a new tab
+    // Cleanup interval on unmount or state change
+    return () => clearInterval(intervalId);
+  }, [isPlanning]);
+
+  useEffect(() => {
+    if (!isPlanning && routeData) {
+      onSolutionUpdate?.(routeData);
+    }
+  }, [isPlanning, routeData, onSolutionUpdate]);
+
   const openRouteMap = () => {
     if (jobId) {
       window.open(`/route-map?jobId=${jobId}`, '_blank');
     } else {
-      alert('No route plan available. Please generate a route plan first.');
+      alert('No route plan available');
     }
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Stats Panel</h2>
-      <div className="flex items-center space-x-6 mb-4">
+    <div className="p-4 border rounded shadow-md">
+      <h3 className="text-lg font-medium mb-2">{warehouse.name}</h3>
+      <div className="flex items-center space-x-4 mb-4">
         <button
           className={`px-4 py-2 rounded-full transition-colors duration-200 ${
-            isLoading ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'
+            isPlanning 
+              ? 'bg-blue-600 text-white' 
+              : 'bg-green-600 text-white'
           }`}
           onClick={handlePlanClick}
-          disabled={isLoading}
+          disabled={isPlanning}
         >
-          {isLoading ? `Processing... (${countdown}s)` : 'Plan Now'}
+          {isPlanning 
+            ? `Processing... (${countdown || 0}s)` 
+            : 'Plan Now'
+          }
         </button>
-        <div className="ml-6">Score : {routeData?.score || 'N/A'}</div>
-        <div className="ml-6">
-          <Link href="https://www.google.com" target="_blank" rel="noopener noreferrer">
-            <Image 
-              src="/notepad-text.svg" 
-              width={30} 
-              height={30} 
-              alt="Arrow Icon" 
-              className="w-6 h-6"
-            />
-          </Link>
-        </div>
-        
-        {/* Route Map Button */}
-        {routeData && jobId && (
+        <div className="ml-6">Score: {routeData?.score || 'N/A'}</div>
+        {jobId && (
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={openRouteMap}
           >
             Open Route Map
@@ -92,7 +111,6 @@ const Panel = ({ onSolutionUpdate }) => {
         </div>
       </div>
 
-      {/* Display SolutionDetails when routeData is available */}
       {routeData && (
         <SolutionDetails solution={routeData} />
       )}

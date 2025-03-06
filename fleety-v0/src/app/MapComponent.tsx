@@ -27,7 +27,7 @@ function MapComponent() {
 
   // Initialize the map
   useEffect(() => {
-    setMap(new window.google.maps.Map(ref.current, { ...options, center, zoom: 13 }));
+    setMap(new window.google.maps.Map(ref.current, { ...options, center, zoom: 11 }));
   }, []);
 
   // Fetch warehouse data
@@ -72,7 +72,7 @@ function MapComponent() {
                 lat: warehouse.addressLocation.latitude,
                 lng: warehouse.addressLocation.longitude,
               }}
-              content={<img src="/warehouse3.png" alt="Warehouse" style={{ width: "40px", height: "40px" }} />}
+              content={<img src="/warehouse3.png" alt="Warehouse" style={{ width: "20px", height: "20px" }} />} // marker size adjust
             />
           ))}
 

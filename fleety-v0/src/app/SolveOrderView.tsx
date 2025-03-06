@@ -46,6 +46,9 @@ interface SolveOrderViewProps {
 }
 
 const SolveOrderView: React.FC<SolveOrderViewProps> = ({ solution }) => {
+  // Convert score to a number for comparison
+  const scoreValue = parseFloat(solution.score);
+
   return (
     <div className="mt-6 p-4 bg-gray-100 rounded-lg">
       <h3 className="text-xl font-semibold mb-4">Solution Details</h3>
@@ -125,6 +128,7 @@ const SolveOrderView: React.FC<SolveOrderViewProps> = ({ solution }) => {
       <div>
         <h4 className="text-lg font-semibold mb-2">Solver Information</h4>
         <p><strong>Score:</strong> {solution.score}</p>
+        {scoreValue < 0 && <p className="text-red-500">Insufficient Vehicles</p>}
         <p><strong>Solver Status:</strong> {solution.solverStatus}</p>
         <p><strong>Score Explanation:</strong></p>
         <pre className="bg-white p-2 rounded">{solution.scoreExplanation}</pre>

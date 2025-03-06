@@ -123,7 +123,7 @@ def export_to_pdf(log_id, df, feedback):
     return buffer
 
 # Streamlit UI
-st.title("🚚 Delivery Log Viewer with AI Feedback")
+st.title("Fleety Dev Log Viewer")
 
 # Fetch unique log IDs
 log_ids = get_unique_log_ids()

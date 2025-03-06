@@ -33,7 +33,7 @@ interface RouteData {
   totalDrivingTimeSeconds: number;
 }
 
-const useRoutePlanner = () => {
+const useRoutePlanner = (warehouseId: string) => {
   const [isPlanning, setIsPlanning] = useState<boolean>(false);
   const [routeData, setRouteData] = useState<RouteData | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
@@ -43,7 +43,7 @@ const useRoutePlanner = () => {
   const handlePlanClick = async () => {
     if (!isPlanning) {
       try {
-        const response = await fetch('http://localhost:8080/vehiclerouteplan/2');
+        const response = await fetch(`http://localhost:8080/vehiclerouteplan/${warehouseId}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }

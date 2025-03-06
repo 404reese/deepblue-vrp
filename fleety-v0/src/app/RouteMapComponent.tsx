@@ -31,7 +31,7 @@ const ROUTE_COLORS = [
 const formatDateTime = (dateTimeString) => {
   if (!dateTimeString) return "N/A";
   const date = new Date(dateTimeString);
-  return date.toLocaleString();
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };
 
 // Helper function to format duration in seconds to minutes and hours
@@ -48,6 +48,116 @@ const formatDuration = (seconds) => {
   }
 };
 
+function VehicleVisitsTable({ solution }) {
+  const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [orders, setOrders] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!selectedVehicle?.visits?.length) return;
+      
+      setLoading(true);
+      try {
+        const orderPromises = selectedVehicle.visits.map(visitId => 
+          fetch(`http://localhost:8080/orders/visit/${visitId}`)
+            .then(res => res.json())
+            .then(data => [visitId, data])
+        );
+        
+        const results = await Promise.all(orderPromises);
+        setOrders(Object.fromEntries(results));
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+      setLoading(false);
+    };
+
+    fetchOrders();
+  }, [selectedVehicle]);
+
+  const getVehicleVisits = (vehicle) => {
+    const vehicleVisitIds = vehicle.visits || [];
+    return solution.visits
+      .filter(visit => vehicleVisitIds.includes(visit.id))
+      .sort((a, b) => new Date(a.arrivalTime).getTime() - new Date(b.arrivalTime).getTime());
+  };
+
+  return (
+    <div className="h-full flex flex-col">
+      <div className="mb-4">
+        <select 
+          className="w-full p-2 border rounded-md"
+          onChange={(e) => {
+            setOrders({});
+            setSelectedVehicle(solution.vehicles[e.target.value]);
+          }}
+        >
+          <option value="">Select Vehicle</option>
+          {solution.vehicles.map((vehicle, index) => (
+            <option key={vehicle.id} value={index}>
+              Vehicle {vehicle.id}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {selectedVehicle && (
+        <div className="flex-1 overflow-auto">
+          <div className="bg-blue-100 p-3 rounded-md mb-3">
+            <h3 className="font-bold">Vehicle Info</h3>
+            <p>Total Driving Time: {formatDuration(selectedVehicle.totalDrivingTimeSeconds)}</p>
+            <p>Used Capacity: {selectedVehicle.totalDemand || 'N/A'}</p>
+            <p>Visits: {selectedVehicle.visits?.length || 0}</p>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-2 text-center">Visit ID</th>
+                  <th className="p-2 text-center">Time</th>
+                  <th className="p-2 text-center">Service Duration</th>
+                  <th className="p-2 text-center">Sender</th>
+                  <th className="p-2 text-center">Receiver</th>
+                  <th className="p-2 text-center min-w-[200px]">Address</th>
+                  <th className="p-2 text-center">Phone</th>
+                </tr>
+              </thead>
+              <tbody>
+                {getVehicleVisits(selectedVehicle).map((visit, index, array) => (
+                  <React.Fragment key={visit.id}>
+                    <tr className="border-b hover:bg-gray-50">
+                      <td className="p-2 text-center">{visit.id}</td>
+                      <td className="p-2 whitespace-nowrap text-center">
+                        <div>Arr: {formatDateTime(visit.arrivalTime)}</div>
+                        <div>Start: {formatDateTime(visit.startServiceTime)}</div>
+                        <div>Dep: {formatDateTime(visit.departureTime)}</div>
+                      </td>
+                      <td className="p-2 text-center">{formatDuration(visit.serviceDuration)}</td>
+                      <td className="p-2 text-center">{orders[visit.id]?.senderName || 'Loading...'}</td>
+                      <td className="p-2 text-center">{orders[visit.id]?.receiverName || 'Loading...'}</td>
+                      <td className="p-2 break-words max-w-[300px] text-center">{orders[visit.id]?.receiverAddress || 'Loading...'}</td>
+                      <td className="p-2 text-center">{orders[visit.id]?.phoneNumber || 'Loading...'}</td>
+                    </tr>
+                    {index < array.length - 1 && (
+                      <tr className="bg-blue-50 text-blue-600 text-sm">
+                        <td colSpan="7" className="p-1 text-left left-4">
+                          Driving {formatDuration(array[index + 1].drivingTimeSecondsFromPreviousStandstill)}
+                        </td>
+                      </tr>
+                    )}
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RouteMapComponent({ solution }) {
   const ref = useRef();
   const [map, setMap] = useState(null);
@@ -55,6 +165,27 @@ function RouteMapComponent({ solution }) {
   const [directionsRenderers, setDirectionsRenderers] = useState([]);
   const [routeMarkers, setRouteMarkers] = useState([]);
   const [activeInfoWindow, setActiveInfoWindow] = useState(null);
+
+  // Add new function to handle opening Google Maps
+  const openInGoogleMaps = () => {
+    if (!solution || !solution.vehicles || !solution.visits) return;
+
+    // Get the first vehicle's route (you can modify this to handle multiple vehicles)
+    const vehicle = solution.vehicles[0];
+    if (!vehicle || !vehicle.homeLocation) return;
+
+    const start = `${vehicle.homeLocation[0]},${vehicle.homeLocation[1]}`;
+    const end = `${vehicle.homeLocation[0]},${vehicle.homeLocation[1]}`; // Return to warehouse
+
+    // Get waypoints from visits
+    const vehicleVisits = solution.visits.filter(visit => vehicle.visits.includes(visit.id));
+    const waypoints = vehicleVisits
+      .map(visit => `${visit.location[0]},${visit.location[1]}`)
+      .join('|');
+
+    const url = `https://www.google.com/maps/dir/?api=1&origin=${start}&destination=${end}&waypoints=${waypoints}&travelmode=driving`;
+    window.open(url, '_blank');
+  };
 
   // Set default center if no solution is provided
   const defaultCenter = {
@@ -389,6 +520,12 @@ function RouteMapComponent({ solution }) {
 
   return (
     <div className="route-map-container" style={{ width: "100%", height: "100vh" }}>
+      <button
+        onClick={openInGoogleMaps}
+        className="absolute top-28 left-76 z-10 px-4 py-2 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white"
+      >
+        Start Job
+      </button>
       <div ref={ref} style={containerStyle} />
     </div>
   );
@@ -396,8 +533,15 @@ function RouteMapComponent({ solution }) {
 
 export default function RouteMap({ solution }) {
   return (
-    <Wrapper apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY2} version="beta" libraries={["marker", "routes"]}>
-      <RouteMapComponent solution={solution} />
-    </Wrapper>
+    <div className="w-full h-full p-2">
+      <div className="w-full h-full border-2 border-gray-200 rounded-lg p-4">
+        <Wrapper apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY2} version="beta" libraries={["marker", "routes"]}>
+          <RouteMapComponent solution={solution} />
+        </Wrapper>
+      </div>
+      <div className="w-full h-full border-2 border-gray-200 rounded-lg shadow-lg p-4 mt-4">
+        <VehicleVisitsTable solution={solution} />
+      </div>
+    </div>
   );
 }

@@ -6,6 +6,10 @@ const colors = [
   '#800080', '#FFC0CB', '#A52A2A', '#00FFFF'
 ];
 
+const options = {
+  scrollwheel: false,
+}
+
 interface RouteRendererProps {
   map: google.maps.Map | undefined;
   routeData: any | null;
@@ -30,6 +34,10 @@ const RouteRenderer = ({ map, routeData }: RouteRendererProps) => {
         lat: visit.Location[0],
         lng: visit.Location[1]
       }));
+      const options = {
+        scrollwheel: false,
+      };
+      
 
       // Create a new polyline
       const polyline = new google.maps.Polyline({
