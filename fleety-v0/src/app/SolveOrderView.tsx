@@ -41,40 +41,24 @@ interface SolutionData {
   totalDrivingTimeSeconds: number;
 }
 
-interface SolutionDetailsProps {
+interface SolveOrderViewProps {
   solution: SolutionData;
 }
 
-const SolutionDetails: React.FC<SolutionDetailsProps> = ({ solution }) => {
-  const handleOpenMap = () => {
-    // Open the map in a new tab
-    const newTab = window.open("", "_blank");
-    newTab.document.write(`
-      <html>
-        <head>
-          <title>Vehicle Route Map</title>
-          <script src="https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY2}&libraries=marker"></script>
-        </head>
-        <body>
-          <div id="root"></div>
-          <script>
-            window.solution = ${JSON.stringify(solution)};
-          </script>
-          <script src="/path/to/RouteMap.js"></script>
-        </body>
-      </html>
-    `);
-    newTab.document.close();
-  };
-
+const SolveOrderView: React.FC<SolveOrderViewProps> = ({ solution }) => {
   return (
     <div className="mt-6 p-4 bg-gray-100 rounded-lg">
-      <h3 className="text-xl font-semibold mb-4">Solution Summary</h3>
+      <h3 className="text-xl font-semibold mb-4">Solution Details</h3>
 
       {/* General Route Information */}
       <div className="mb-6">
         <h4 className="text-lg font-semibold mb-2">Route Information</h4>
         <p><strong>Name:</strong> {solution.name}</p>
+        {/* <p><strong>South West Corner:</strong> {solution.southWestCorner.join(', ')}</p>
+        <p><strong>North East Corner:</strong> {solution.northEastCorner.join(', ')}</p>
+        <p><strong>Start Date Time:</strong> {solution.startDateTime}</p>
+        <p><strong>End Date Time:</strong> {solution.endDateTime}</p> */}
+        <p><strong>Total Driving Time:</strong> {Math.floor(solution.totalDrivingTimeSeconds / 3600)}H {Math.floor((solution.totalDrivingTimeSeconds % 3600) / 60)}M</p>
       </div>
 
       {/* Vehicles */}
@@ -85,6 +69,7 @@ const SolutionDetails: React.FC<SolutionDetailsProps> = ({ solution }) => {
             <tr>
               <th className="text-center">ID</th>
               <th className="text-center">Total Capacity</th>
+              <th className="text-center">Home Location</th>
               <th className="text-center">Departure Time</th>
               <th className="text-center">Arrival Time</th>
               <th className="text-center">Utilized Capacity</th>
@@ -96,6 +81,7 @@ const SolutionDetails: React.FC<SolutionDetailsProps> = ({ solution }) => {
               <tr key={index} className="border-b">
                 <td className="py-2 text-center">{vehicle.id}</td>
                 <td className="py-2 text-center">{vehicle.capacity}</td>
+                <td className="py-2 text-center">{vehicle.homeLocation.join(', ')}</td>
                 <td className="py-2 text-center">{vehicle.departureTime}</td>
                 <td className="py-2 text-center">{vehicle.arrivalTime}</td>
                 <td className="py-2 text-center">{vehicle.totalDemand}</td>
@@ -106,18 +92,45 @@ const SolutionDetails: React.FC<SolutionDetailsProps> = ({ solution }) => {
         </table>
       </div>
 
-      {/* Button to Open Map */}
-      <div className="mt-4">
-        <button
-          onClick={handleOpenMap}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          
-        >
-          Open Route Map
-        </button>
+      {/* Visits */}
+      <div className="mb-6">
+        <h4 className="text-lg font-semibold mb-2">Visits</h4>
+        <table className="w-full">
+          <thead>
+            <tr>
+              <th className="text-left">ID</th>
+              <th className="text-left">Location</th>
+              <th className="text-left">Demand</th>
+              <th className="text-left">Min Start Time</th>
+              <th className="text-left">Max End Time</th>
+              <th className="text-left">Service Duration</th>
+            </tr>
+          </thead>
+          <tbody>
+            {solution.visits.map((visit, index) => (
+              <tr key={index} className="border-b">
+                <td className="py-2">{visit.id}</td>
+                <td className="py-2">{visit.location.join(', ')}</td>
+                <td className="py-2">{visit.demand}</td>
+                <td className="py-2">{visit.minStartTime}</td>
+                <td className="py-2">{visit.maxEndTime}</td>
+                <td className="py-2">{visit.serviceDuration} seconds</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Solver Information */}
+      <div>
+        <h4 className="text-lg font-semibold mb-2">Solver Information</h4>
+        <p><strong>Score:</strong> {solution.score}</p>
+        <p><strong>Solver Status:</strong> {solution.solverStatus}</p>
+        <p><strong>Score Explanation:</strong></p>
+        <pre className="bg-white p-2 rounded">{solution.scoreExplanation}</pre>
       </div>
     </div>
   );
 };
 
-export default SolutionDetails;
+export default SolveOrderView;

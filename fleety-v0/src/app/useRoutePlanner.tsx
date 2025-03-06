@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'; // Ensure this is imported
+import { useState, useEffect } from 'react';
 
 interface RouteData {
   name: string;
@@ -38,7 +38,7 @@ const useRoutePlanner = () => {
   const [routeData, setRouteData] = useState<RouteData | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
   const [hasSentData, setHasSentData] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handlePlanClick = async () => {
     if (!isPlanning) {
@@ -131,7 +131,7 @@ const useRoutePlanner = () => {
     }
   };
 
-  return { isPlanning, routeData, isLoading, handlePlanClick }; // Return isLoading for UI feedback
+  return { isPlanning, routeData, isLoading, jobId, handlePlanClick }; // Return jobId for use in other components
 };
 
 export default useRoutePlanner;

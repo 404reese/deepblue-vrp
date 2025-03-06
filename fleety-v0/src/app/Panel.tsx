@@ -1,3 +1,4 @@
+// components/Panel.js
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -6,8 +7,14 @@ import Link from 'next/link';
 import useRoutePlanner from './useRoutePlanner'; // Import the custom hook
 import SolutionDetails from './SolutionDetails'; // Import the new component
 
-const Panel = () => {
-  const { isPlanning, routeData, isLoading, handlePlanClick } = useRoutePlanner(); // Use the custom hook
+const Panel = ({ onSolutionUpdate }) => {
+  const { 
+    isPlanning, 
+    routeData, 
+    isLoading, 
+    handlePlanClick,
+    jobId
+  } = useRoutePlanner(); // Use the custom hook
   const [countdown, setCountdown] = useState<number | null>(null); // Countdown state
 
   // Start the countdown when isLoading is true
@@ -21,17 +28,19 @@ const Panel = () => {
       return () => clearInterval(interval); // Cleanup interval on unmount
     } else {
       setCountdown(null); // Reset countdown when not loading
+      // Update parent state with the latest routeData
+      onSolutionUpdate(routeData);
     }
-  }, [isLoading]);
+  }, [isLoading, routeData, onSolutionUpdate]);
 
-  const vehicles = [
-    { name: 'Vehicle 1', load: '🌟', drivingTime: '0h 0m' },
-    { name: 'Vehicle 2', load: '🌟', drivingTime: '0h 0m' },
-    { name: 'Vehicle 3', load: '🌟', drivingTime: '0h 0m' },
-    { name: 'Vehicle 4', load: '🌟', drivingTime: '0h 0m' },
-    { name: 'Vehicle 5', load: '🌟', drivingTime: '0h 0m' },
-    { name: 'Vehicle 6', load: '🌟', drivingTime: '0h 0m' },
-  ];
+  // Function to open route map in a new tab
+  const openRouteMap = () => {
+    if (jobId) {
+      window.open(`/route-map?jobId=${jobId}`, '_blank');
+    } else {
+      alert('No route plan available. Please generate a route plan first.');
+    }
+  };
 
   return (
     <div>
@@ -41,17 +50,33 @@ const Panel = () => {
           className={`px-4 py-2 rounded-full transition-colors duration-200 ${
             isLoading ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'
           }`}
-          onClick={handlePlanClick} // Use the handler function from the custom hook
-          disabled={isLoading} // Disable the button while loading
+          onClick={handlePlanClick}
+          disabled={isLoading}
         >
-          {isLoading ? `Processing... (${countdown}s)` : 'Plan Now'} {/* Dynamically set the text */}
+          {isLoading ? `Processing... (${countdown}s)` : 'Plan Now'}
         </button>
-        <div className="ml-6">Score : 100</div>
+        <div className="ml-6">Score : {routeData?.score || 'N/A'}</div>
         <div className="ml-6">
           <Link href="https://www.google.com" target="_blank" rel="noopener noreferrer">
-            <Image src="/notepad-text.svg" width={30} height={30} alt="Arrow Icon" className="w-6 h-6" />
+            <Image 
+              src="/notepad-text.svg" 
+              width={30} 
+              height={30} 
+              alt="Arrow Icon" 
+              className="w-6 h-6"
+            />
           </Link>
         </div>
+        
+        {/* Route Map Button */}
+        {routeData && jobId && (
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors"
+            onClick={openRouteMap}
+          >
+            Open Route Map
+          </button>
+        )}
       </div>
 
       <div className="mb-4">
@@ -59,33 +84,18 @@ const Panel = () => {
         <div className="flex justify-between">
           <div className="ml-4">Total driving time:</div>
           <div className="flex items-center justify-end mr-4 font-semibold">
-            {routeData ? `${Math.floor(routeData.totalDrivingTimeSeconds / 3600)}H ${Math.floor((routeData.totalDrivingTimeSeconds % 3600) / 60)}M` : '0H 0M'}
+            {routeData 
+              ? `${Math.floor(routeData.totalDrivingTimeSeconds / 3600)}H ${Math.floor((routeData.totalDrivingTimeSeconds % 3600) / 60)}M` 
+              : '0H 0M'
+            }
           </div>
         </div>
       </div>
 
-      <h2 className="text-xl font-semibold mb-2">Vehicles</h2>
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className="text-left">Name</th>
-            <th className="text-left">Load</th>
-            <th className="text-left">Driving Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {vehicles.map((vehicle, index) => (
-            <tr key={index} className="border-b">
-              <td className="py-2">{vehicle.name}</td>
-              <td className="py-2">{vehicle.load}</td>
-              <td className="py-2">{vehicle.drivingTime}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Render SolutionDetails if routeData is available */}
-      {routeData && <SolutionDetails solution={routeData} />}
+      {/* Display SolutionDetails when routeData is available */}
+      {routeData && (
+        <SolutionDetails solution={routeData} />
+      )}
     </div>
   );
 };

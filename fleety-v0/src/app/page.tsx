@@ -1,13 +1,18 @@
 // components/Admin.js
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import DashboardCards from '../components/dashboardwidgets';
 import Panel from './Panel';
 import Map from './MapComponent';
+import SolveOrderView from './SolveOrderView';
 
 const Admin = () => {
+  // Add state to hold the solution data
+  const [solution, setSolution] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <div className="flex flex-col space-y-4 m-4">
       <Card>
@@ -40,15 +45,19 @@ const Admin = () => {
       {/* New Containers Below */}
       <div className="flex space-x-4">
         {/* Left Container: Map */}
-        <div className="w-[72%] bg-white p-4 rounded-md shadow-md h-[100vh]">
+        <div className="w-[60%] bg-white p-4 rounded-md shadow-md h-[100vh]">
           <h2 className="text-2xl font-semibold mb-4">Map</h2>
           <Map />
         </div>
 
         {/* Right Container: Driver & Truck List */}
-        <div className="w-[28%] bg-white p-4 rounded-md shadow-md">
-          <Panel />
+        <div className="w-[40%] bg-white p-4 rounded-md shadow-md">
+          <Panel onSolutionUpdate={setSolution} />
         </div>
+      </div>
+      <div className="h-auto min-h-[200px] bg-white rounded-md shadow-md overflow-hidden mt-4">
+        {isLoading && <div>Loading...</div>}
+        {solution && <SolveOrderView solution={solution} />}
       </div>
     </div>
   );
