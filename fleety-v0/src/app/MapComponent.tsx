@@ -72,7 +72,7 @@ function MapComponent() {
                 lat: warehouse.addressLocation.latitude,
                 lng: warehouse.addressLocation.longitude,
               }}
-              content={<img src="/warehouse3.png" alt="Warehouse" style={{ width: "20px", height: "20px" }} />} // marker size adjust
+              content={<img src="/warehouse3.png" alt="Warehouse" style={{ width: "30px", height: "30px" }} />} // marker size adjust
             />
           ))}
 
