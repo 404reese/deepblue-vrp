@@ -76,6 +76,10 @@ const ReportsPage: FC = () => {
   const [selectedRouteId, setSelectedRouteId] = useState<number | null>(null);
   const [showMap, setShowMap] = useState(false);
 
+  const openPDF = (filename: string) => {
+    window.open(`/${filename}`, '_blank');
+  };
+
   const handleViewRoute = (id: number) => {
     const waypoints = mumbaiLocations[id];
     if (waypoints.length === 0) {
@@ -116,7 +120,7 @@ const ReportsPage: FC = () => {
 
       <div className="p-5 border border-gray-300 rounded-lg bg-gray-100">
         <div className="flex justify-between items-center">
-          <div className="cursor-pointer" onClick={() => openPDF('1.pdf')}>
+          <div className="cursor-pointer" onClick={() => openPDF('2.pdf')}>
             <h2 className="text-xl font-semibold">Delivery_Report_ab762f5d</h2>
             <p className="text-gray-600">Date : 2025-02-27</p>
           </div>
